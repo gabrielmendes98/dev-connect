@@ -1,0 +1,34 @@
+{
+  "name": "dev-connect",
+  "version": "1.0.0",
+  "description": "This project was created to practice some concepts and skills, like:",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src --exec ts-node src/app.ts",
+    "build": "tsc",
+    "serve": "yarn build && yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gabrielmendes98/dev-connect.git"
+  },
+  "author": "gabrielmssantiago@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielmendes98/dev-connect/issues"
+  },
+  "homepage": "https://github.com/gabrielmendes98/dev-connect#readme",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.3",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
