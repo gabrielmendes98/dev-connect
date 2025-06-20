@@ -11,6 +11,7 @@ This project was created to practice some concepts and skills, like:
 - Error Handling
 - Event Emitters / Event Driven Architecture
 - Clean Architecture
+- Domain Driven Design (DDD)
 - Testing
 - Data validation
 
@@ -19,6 +20,12 @@ In the future, maybe I will include some more things, like:
 - WebSockets
 - Message Queue
 - Caching
+
+## TODO
+
+- Add absolute imports
+- Block lower layers to import from upper layers
+- Add notification pattern for errors to avoid throwing errors one by one
 
 ## The domain
 
