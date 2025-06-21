@@ -33,6 +33,8 @@ In the future, maybe I will include some more things, like:
 
 The idea is to create a social network/platform focused on developers, where they can showcase their projects, look for mentors, offer mentoring and participate in technical discussions.
 
+More details in the [business-rules.md](./business-rules.md) file.
+
 ### Breaking down the problem
 
 ![](./architecture/problem-breakdown.excalidraw.png)
