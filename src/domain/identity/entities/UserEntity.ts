@@ -3,7 +3,7 @@ import { EmailVO } from '../value-objects/EmailVO';
 import { HashedPasswordVO } from '../value-objects/HashedPasswordVO';
 import { IdVO } from '../value-objects/IdVO';
 import { PlainPasswordVO } from '../value-objects/PlainPasswordVO';
-import { EntityError } from './EntityError';
+import { EntityError } from '../../shared/errors/EntityError';
 
 export class UserEntity {
   private readonly id: IdVO;
@@ -13,6 +13,7 @@ export class UserEntity {
   private bio: string;
   private role: string;
   private avatarUrl: string | null; // Could be renamed to avatar and converted to VO if avatar was more complex
+  private username: string;
 
   private constructor(
     id: IdVO,
@@ -22,6 +23,7 @@ export class UserEntity {
     bio: string,
     role: string,
     avatarUrl: string | null,
+    username: string,
   ) {
     this.validateName(name);
     // Other validations
@@ -33,6 +35,7 @@ export class UserEntity {
     this.bio = bio;
     this.role = role;
     this.avatarUrl = avatarUrl;
+    this.username = username;
   }
 
   public equals(other: UserEntity) {
@@ -47,6 +50,7 @@ export class UserEntity {
     bio: string,
     avatarUrl: string | null = null,
     passwordHasher: PasswordHasherService,
+    username: string,
   ): Promise<UserEntity> {
     const id = IdVO.create();
     const email = EmailVO.create(emailString);
@@ -55,7 +59,7 @@ export class UserEntity {
     const hashedPasswordString = await passwordHasher.hash(plainPassword.getValue());
     const hashedPasswordVO = HashedPasswordVO.fromString(hashedPasswordString);
 
-    return new UserEntity(id, name, email, hashedPasswordVO, bio, role, avatarUrl);
+    return new UserEntity(id, name, email, hashedPasswordVO, bio, role, avatarUrl, username);
   }
 
   public static fromPersistence(
@@ -66,12 +70,22 @@ export class UserEntity {
     bio: string,
     role: string,
     avatarUrl: string | null = null,
+    username: string,
   ): UserEntity {
     const userId = IdVO.fromString(id);
     const userEmail = EmailVO.create(emailString);
     const userHashedPassword = HashedPasswordVO.fromString(passwordHash);
 
-    return new UserEntity(userId, name, userEmail, userHashedPassword, bio, role, avatarUrl);
+    return new UserEntity(
+      userId,
+      name,
+      userEmail,
+      userHashedPassword,
+      bio,
+      role,
+      avatarUrl,
+      username,
+    );
   }
 
   public getId(): IdVO {

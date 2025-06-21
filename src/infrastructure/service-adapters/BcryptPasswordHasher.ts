@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs';
-import { PasswordHasherService } from '../../domain/services/PasswordHasherService';
+import { PasswordHasherService } from '../../domain/identity/services/PasswordHasherService';
 
 export class BcryptPasswordHasher implements PasswordHasherService {
   private readonly saltRounds: number;

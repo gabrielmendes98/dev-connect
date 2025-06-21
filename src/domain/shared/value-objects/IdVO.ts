@@ -1,5 +1,5 @@
 import { v4 as uuidv4, validate as uuidValidate, version as uuidVersion } from 'uuid';
-import { ValueObjectError } from './ValueObjectError';
+import { ValueObjectError } from '../errors/ValueObjectError';
 
 export class IdVO {
   private constructor(private readonly value: string) {}

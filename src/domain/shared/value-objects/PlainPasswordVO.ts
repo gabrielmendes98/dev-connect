@@ -1,4 +1,4 @@
-import { ValueObjectError } from './ValueObjectError';
+import { ValueObjectError } from '../errors/ValueObjectError';
 
 export class PlainPasswordVO {
   private constructor(private readonly value: string) {}

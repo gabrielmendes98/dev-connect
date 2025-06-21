@@ -1,5 +1,5 @@
 import { PasswordHasherService } from '../services/PasswordHasherService';
-import { ValueObjectError } from './ValueObjectError';
+import { ValueObjectError } from '../errors/ValueObjectError';
 
 export class HashedPasswordVO {
   private readonly value: string;
