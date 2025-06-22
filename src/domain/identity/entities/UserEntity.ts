@@ -1,41 +1,22 @@
-import { PasswordHasherService } from '../services/PasswordHasherService';
-import { EmailVO } from '../value-objects/EmailVO';
-import { HashedPasswordVO } from '../value-objects/HashedPasswordVO';
-import { IdVO } from '../value-objects/IdVO';
-import { PlainPasswordVO } from '../value-objects/PlainPasswordVO';
 import { EntityError } from '../../shared/errors/EntityError';
-
+import { EmailVO } from '../../shared/value-objects/EmailVO';
+import { HashedPasswordVO } from '../../shared/value-objects/HashedPasswordVO';
+import { IdVO } from '../../shared/value-objects/IdVO';
+import { PlainPasswordVO } from '../../shared/value-objects/PlainPasswordVO';
+import { PasswordHasherService } from '../services/PasswordHasherService';
 export class UserEntity {
   private readonly id: IdVO;
-  private name: string;
   private email: EmailVO;
   private passwordHash: HashedPasswordVO;
-  private bio: string;
-  private role: string;
-  private avatarUrl: string | null; // Could be renamed to avatar and converted to VO if avatar was more complex
-  private username: string;
+  private readonly profileId: IdVO;
 
-  private constructor(
-    id: IdVO,
-    name: string,
-    email: EmailVO,
-    passwordHash: HashedPasswordVO,
-    bio: string,
-    role: string,
-    avatarUrl: string | null,
-    username: string,
-  ) {
-    this.validateName(name);
-    // Other validations
+  private constructor(id: IdVO, email: EmailVO, passwordHash: HashedPasswordVO, profileId: IdVO) {
+    // Some validations if needed
 
     this.id = id;
-    this.name = name;
     this.email = email;
     this.passwordHash = passwordHash;
-    this.bio = bio;
-    this.role = role;
-    this.avatarUrl = avatarUrl;
-    this.username = username;
+    this.profileId = profileId;
   }
 
   public equals(other: UserEntity) {
@@ -43,96 +24,48 @@ export class UserEntity {
   }
 
   public static async registerNewUser(
-    name: string,
     emailString: string,
     plainPasswordString: string,
-    role: string,
-    bio: string,
-    avatarUrl: string | null = null,
     passwordHasher: PasswordHasherService,
-    username: string,
   ): Promise<UserEntity> {
     const id = IdVO.create();
     const email = EmailVO.create(emailString);
     const plainPassword = PlainPasswordVO.create(plainPasswordString);
+    const profileId = IdVO.create();
 
     const hashedPasswordString = await passwordHasher.hash(plainPassword.getValue());
     const hashedPasswordVO = HashedPasswordVO.fromString(hashedPasswordString);
 
-    return new UserEntity(id, name, email, hashedPasswordVO, bio, role, avatarUrl, username);
+    return new UserEntity(id, email, hashedPasswordVO, profileId);
   }
 
   public static fromPersistence(
     id: string,
-    name: string,
     emailString: string,
     passwordHash: string,
-    bio: string,
-    role: string,
-    avatarUrl: string | null = null,
-    username: string,
+    profileIdString: string,
   ): UserEntity {
     const userId = IdVO.fromString(id);
+    const profileId = IdVO.fromString(profileIdString);
     const userEmail = EmailVO.create(emailString);
     const userHashedPassword = HashedPasswordVO.fromString(passwordHash);
 
-    return new UserEntity(
-      userId,
-      name,
-      userEmail,
-      userHashedPassword,
-      bio,
-      role,
-      avatarUrl,
-      username,
-    );
+    return new UserEntity(userId, userEmail, userHashedPassword, profileId);
   }
 
   public getId(): IdVO {
     return this.id;
   }
 
-  public getName(): string {
-    return this.name;
-  }
-
   public getEmail(): EmailVO {
     return this.email;
   }
 
-  public getPasswordHash(): HashedPasswordVO {
-    return this.passwordHash;
-  }
-
-  public getBio(): string {
-    return this.bio;
-  }
-
-  public getRole(): string {
-    return this.role;
-  }
-
-  public getAvatarUrl(): string | null {
-    return this.avatarUrl;
-  }
-
-  private validateName(name: string) {
-    if (!name) {
-      throw new EntityError('User name should not be empty');
-    }
-
-    if (name.length < 3 || name.length > 100) {
-      throw new EntityError('User name should have between 3 and 100 characters');
-    }
-  }
-
-  public updateName(newName: string) {
-    this.validateName(newName);
-    this.name = newName;
+  public getProfileId(): IdVO {
+    return this.profileId;
   }
 
   public updateEmail(newEmailString: string) {
-    // Validate email
     const newEmail = EmailVO.create(newEmailString);
     this.email = newEmail;
   }

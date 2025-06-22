@@ -1,4 +1,4 @@
-import { PasswordHasherService } from '../services/PasswordHasherService';
+import { PasswordHasherService } from '../../identity/services/PasswordHasherService';
 import { ValueObjectError } from '../errors/ValueObjectError';
 
 export class HashedPasswordVO {
