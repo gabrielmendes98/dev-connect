@@ -9,17 +9,28 @@ export class PrismaUserRepository implements UserRepository {
   constructor(private readonly client: PrismaClient) {}
 
   async createWithProfile(user: UserEntity, profile: ProfileEntity): Promise<void> {
-    const userModel = UserMapper.toPersistence(user);
-    const profileModel = ProfileMapper.toPersistence(profile);
+    try {
+      const userModel = UserMapper.toPersistence(user);
 
-    await this.client.user.create({
-      data: {
-        ...userModel,
-        profile: {
-          create: profileModel,
-        },
-      },
-    });
+      await this.client.$transaction(async (tx) => {
+        await tx.user.create({
+          data: userModel,
+        });
+      });
+
+      const profileModel = ProfileMapper.toPersistence(profile);
+
+      await this.client.$transaction(async (tx) => {
+        await tx.profile.create({
+          data: profileModel,
+        });
+      });
+    } catch (error) {
+      console.log('Error creating user and profile in transaction:', error);
+      throw error;
+    } finally {
+      await this.client.$disconnect();
+    }
   }
 
   async save(user: UserEntity): Promise<void> {
