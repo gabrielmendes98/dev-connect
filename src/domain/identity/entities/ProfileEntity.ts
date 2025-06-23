@@ -1,9 +1,10 @@
+import { Entity } from '../../shared/core/Entity';
 import { EntityError } from '../../shared/errors/EntityError';
 import { IdVO } from '../../shared/value-objects/IdVO';
 
-export class ProfileEntity {
+export class ProfileEntity extends Entity {
   private constructor(
-    private readonly id: IdVO,
+    protected readonly id: IdVO,
     private readonly userId: IdVO,
     private name: string | null,
     private username: string | null,
@@ -11,17 +12,13 @@ export class ProfileEntity {
     private role: string | null,
     private avatarUrl: string | null,
   ) {
-    this.id = id;
+    super(id);
     this.userId = userId;
     this.name = name;
     this.bio = bio;
     this.role = role;
     this.avatarUrl = avatarUrl;
     this.username = username;
-  }
-
-  public equals(other: ProfileEntity) {
-    return other instanceof ProfileEntity && this.id.equals(other.id);
   }
 
   public static async createInitialProfile(userId: IdVO): Promise<ProfileEntity> {
@@ -42,10 +39,6 @@ export class ProfileEntity {
     const userId = IdVO.fromString(userIdString);
 
     return new ProfileEntity(id, userId, name, username, bio, role, avatarUrl);
-  }
-
-  public getId() {
-    return this.id;
   }
 
   public getName() {

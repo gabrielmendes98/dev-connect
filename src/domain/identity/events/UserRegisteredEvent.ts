@@ -1,1 +1,19 @@
-export class UserRegisteredEvent extends Event {}
+import { DomainEvent } from '../../shared/events/DomainEvent';
+import { EmailVO } from '../../shared/value-objects/EmailVO';
+import { IdVO } from '../../shared/value-objects/IdVO';
+
+export class UserRegisteredEvent implements DomainEvent {
+  public dateTimeOccurred: Date;
+  public readonly userId: IdVO;
+  public readonly email: EmailVO;
+
+  constructor(userId: IdVO, email: EmailVO) {
+    this.dateTimeOccurred = new Date();
+    this.userId = userId;
+    this.email = email;
+  }
+
+  getAggregateId(): IdVO {
+    throw this.userId;
+  }
+}

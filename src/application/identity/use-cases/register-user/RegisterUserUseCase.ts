@@ -3,6 +3,7 @@ import { UserEntity } from '../../../../domain/identity/entities/UserEntity';
 import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
 import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
 import { ConflictError } from '../../../../domain/shared/errors/HttpErrors';
+import { DomainHub } from '../../../../domain/shared/events/DomainHub';
 import { UseCase } from '../../../shared/UseCase';
 import { RegisterUserInput, RegisterUserOutput } from './RegisterUserDTO';
 
@@ -28,7 +29,7 @@ export class RegisterUserUseCase implements UseCase<RegisterUserInput, RegisterU
 
     await this.userRepository.createWithProfile(user, profile);
 
-    // TODO: Dispatch user created event
+    DomainHub.dispatchEventsForAggregate(user.getId());
 
     return void 0;
   }

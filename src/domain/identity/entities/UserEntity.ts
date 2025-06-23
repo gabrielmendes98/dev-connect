@@ -4,31 +4,27 @@ import { HashedPasswordVO } from '../../shared/value-objects/HashedPasswordVO';
 import { IdVO } from '../../shared/value-objects/IdVO';
 import { PlainPasswordVO } from '../../shared/value-objects/PlainPasswordVO';
 import { PasswordHasherService } from '../services/PasswordHasherService';
-export class UserEntity {
-  private readonly id: IdVO;
+import { AggregateRoot } from '../../shared/core/AggregateRoot';
+import { UserRegisteredEvent } from '../events/UserRegisteredEvent';
+
+export class UserEntity extends AggregateRoot {
   private email: EmailVO;
   private passwordHash: HashedPasswordVO;
   private createdAt: Date | null;
   private updatedAt: Date | null;
 
   private constructor(
-    id: IdVO,
+    protected readonly id: IdVO,
     email: EmailVO,
     passwordHash: HashedPasswordVO,
     createdAt: Date | null,
     updatedAt: Date | null,
   ) {
-    // Some validations if needed
-
-    this.id = id;
+    super(id);
     this.email = email;
     this.passwordHash = passwordHash;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-  }
-
-  public equals(other: UserEntity) {
-    return other instanceof UserEntity && this.id.equals(other.id);
   }
 
   public static async registerNewUser(
@@ -43,7 +39,11 @@ export class UserEntity {
     const hashedPasswordString = await passwordHasher.hash(plainPassword.getValue());
     const hashedPasswordVO = HashedPasswordVO.fromString(hashedPasswordString);
 
-    return new UserEntity(id, email, hashedPasswordVO, null, null);
+    const user = new UserEntity(id, email, hashedPasswordVO, null, null);
+
+    user.addDomainEvent(new UserRegisteredEvent(id, email));
+
+    return user;
   }
 
   public static fromPersistence(
@@ -58,10 +58,6 @@ export class UserEntity {
     const userHashedPassword = HashedPasswordVO.fromString(passwordHash);
 
     return new UserEntity(userId, userEmail, userHashedPassword, createdAt, updatedAt);
-  }
-
-  public getId(): IdVO {
-    return this.id;
   }
 
   public getEmail(): EmailVO {
