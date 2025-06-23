@@ -26,6 +26,9 @@ In the future, maybe I will include some more things, like:
 - Add absolute imports
 - Block lower layers to import from upper layers
 - Add notification pattern for errors to avoid throwing errors one by one
+- Add pre-commit hook
+- Refactor architecture drawing to add new presentation layer
+- Improve Dependency Injection and remove it from app.ts
 
 ## The domain
 

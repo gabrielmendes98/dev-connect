@@ -24,7 +24,8 @@ export class ProfileEntity {
     return other instanceof ProfileEntity && this.id.equals(other.id);
   }
 
-  public static async createInitialProfile(profileId: IdVO, userId: IdVO): Promise<ProfileEntity> {
+  public static async createInitialProfile(userId: IdVO): Promise<ProfileEntity> {
+    const profileId = IdVO.create();
     return new ProfileEntity(profileId, userId, null, null, null, null, null);
   }
 
@@ -65,6 +66,10 @@ export class ProfileEntity {
 
   public getUserId() {
     return this.userId;
+  }
+
+  public getBio() {
+    return this.bio;
   }
 
   private validateNewName(name: string) {

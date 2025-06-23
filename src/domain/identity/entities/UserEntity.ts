@@ -8,15 +8,23 @@ export class UserEntity {
   private readonly id: IdVO;
   private email: EmailVO;
   private passwordHash: HashedPasswordVO;
-  private readonly profileId: IdVO;
+  private createdAt: Date | null;
+  private updatedAt: Date | null;
 
-  private constructor(id: IdVO, email: EmailVO, passwordHash: HashedPasswordVO, profileId: IdVO) {
+  private constructor(
+    id: IdVO,
+    email: EmailVO,
+    passwordHash: HashedPasswordVO,
+    createdAt: Date | null,
+    updatedAt: Date | null,
+  ) {
     // Some validations if needed
 
     this.id = id;
     this.email = email;
     this.passwordHash = passwordHash;
-    this.profileId = profileId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public equals(other: UserEntity) {
@@ -31,26 +39,25 @@ export class UserEntity {
     const id = IdVO.create();
     const email = EmailVO.create(emailString);
     const plainPassword = PlainPasswordVO.create(plainPasswordString);
-    const profileId = IdVO.create();
 
     const hashedPasswordString = await passwordHasher.hash(plainPassword.getValue());
     const hashedPasswordVO = HashedPasswordVO.fromString(hashedPasswordString);
 
-    return new UserEntity(id, email, hashedPasswordVO, profileId);
+    return new UserEntity(id, email, hashedPasswordVO, null, null);
   }
 
   public static fromPersistence(
     id: string,
     emailString: string,
     passwordHash: string,
-    profileIdString: string,
+    createdAt: Date | null,
+    updatedAt: Date | null,
   ): UserEntity {
     const userId = IdVO.fromString(id);
-    const profileId = IdVO.fromString(profileIdString);
     const userEmail = EmailVO.create(emailString);
     const userHashedPassword = HashedPasswordVO.fromString(passwordHash);
 
-    return new UserEntity(userId, userEmail, userHashedPassword, profileId);
+    return new UserEntity(userId, userEmail, userHashedPassword, createdAt, updatedAt);
   }
 
   public getId(): IdVO {
@@ -61,8 +68,16 @@ export class UserEntity {
     return this.email;
   }
 
-  public getProfileId(): IdVO {
-    return this.profileId;
+  public getPasswordHash() {
+    return this.passwordHash;
+  }
+
+  public getCreatedAt(): Date | null {
+    return this.createdAt;
+  }
+
+  public getUpdatedAt(): Date | null {
+    return this.updatedAt;
   }
 
   public updateEmail(newEmailString: string) {
