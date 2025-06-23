@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
+import { ApiResponse } from '../responses/ApiResponse';
 
 export const validateRequest =
   (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
@@ -16,12 +17,12 @@ export const validateRequest =
       if (error instanceof ZodError) {
         const validationError = fromZodError(error);
 
-        res.status(400).json({
-          error: {
-            message: validationError.message,
-            details: validationError.details,
-          },
+        ApiResponse.error(res, {
+          statusCode: 400,
+          message: validationError.message,
+          details: validationError.details,
         });
+
         return;
       }
 

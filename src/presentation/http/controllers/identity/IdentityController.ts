@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { RegisterUserUseCase } from '../../../../application/identity/use-cases/register-user/RegisterUserUseCase';
 import { RegisterUserRequestSchema } from '../../schemas/IdentitySchemas';
+import { ApiResponse } from '../../responses/ApiResponse';
 
 export class IdentityController {
   constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
@@ -16,7 +17,7 @@ export class IdentityController {
         plainPassword: req.body.password,
       });
 
-      res.status(201).json(result);
+      ApiResponse.success(res, result, 201);
 
       return;
     } catch (error) {
