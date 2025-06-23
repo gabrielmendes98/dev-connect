@@ -29,6 +29,7 @@ In the future, maybe I will include some more things, like:
 - Add pre-commit hook
 - Refactor architecture drawing to add new presentation layer
 - Improve Dependency Injection and remove it from app.ts
+- Add more tests
 
 ## The domain
 
