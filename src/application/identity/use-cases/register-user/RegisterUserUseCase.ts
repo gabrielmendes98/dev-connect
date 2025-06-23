@@ -1,9 +1,8 @@
 import { ProfileEntity } from '../../../../domain/identity/entities/ProfileEntity';
 import { UserEntity } from '../../../../domain/identity/entities/UserEntity';
-import { ProfileRepository } from '../../../../domain/identity/repositories/ProfileRepository';
 import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
 import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
-import { DomainError } from '../../../../domain/shared/errors/DomainError';
+import { ConflictError } from '../../../../domain/shared/errors/HttpErrors';
 import { UseCase } from '../../../shared/UseCase';
 import { RegisterUserInput, RegisterUserOutput } from './RegisterUserDTO';
 
@@ -16,7 +15,7 @@ export class RegisterUserUseCase implements UseCase<RegisterUserInput, RegisterU
   public async execute(input: RegisterUserInput): RegisterUserOutput {
     const userAlreadyExists = await this.userRepository.findByEmail(input.email);
     if (userAlreadyExists) {
-      throw new DomainError('Email already registered.');
+      throw new ConflictError('Email already registered.');
     }
 
     const user = await UserEntity.registerNewUser(
