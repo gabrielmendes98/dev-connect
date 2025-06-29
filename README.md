@@ -30,6 +30,7 @@ In the future, maybe I will include some more things, like:
 - Refactor architecture drawing to add new presentation layer
 - Improve Dependency Injection and remove it from app.ts
 - Add more tests
+- Improve error handling on usecases
 
 ## The domain
 
