@@ -1,0 +1,38 @@
+type Tag {
+  id: ID!
+  name: String!
+  usageCount: Int!
+}
+
+type Comment {
+  # TODO: Return complete author object so frontend can create interface with name, avatar, etc.
+  authorId: ID!
+  text: String!
+  createdAt: String! # ISO Format
+}
+
+type Discussion {
+  id: ID!
+  title: String!
+  description: String!
+  createdByUserId: ID!
+  tags: [Tag!]!
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input StartDiscussionInput {
+  title: String!
+  description: String!
+  tags: [ID!]
+}
+
+type Query {
+  discussions: [Discussion!]!
+  discussion(id: ID!): Discussion
+}
+
+type Mutation {
+  startDiscussion(input: StartDiscussionInput!): Discussion!
+}

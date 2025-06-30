@@ -12,6 +12,15 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  mongo-db:
+    image: mongo:8-noble
+    container_name: devconnect_mongo_db
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   postgres_data:
+  mongo_data:

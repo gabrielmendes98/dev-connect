@@ -26,16 +26,23 @@
   "homepage": "https://github.com/gabrielmendes98/dev-connect#readme",
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "@as-integrations/express5": "^1.1.0",
     "@prisma/client": "^6.10.1",
     "@types/bcryptjs": "^3.0.0",
     "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "mongoose": "^8.16.1",
     "uuid": "^11.1.0",
     "zod": "^3.25.67",
     "zod-validation-error": "^3.5.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.3",

@@ -1,4 +1,5 @@
 import express from 'express';
+import { expressMiddleware } from '@as-integrations/express5';
 import { createIdentityRoutes } from './presentation/http/routes';
 import { IdentityController } from './presentation/http/controllers/identity/IdentityController';
 import { RegisterUserUseCase } from './application/identity/use-cases/register-user/RegisterUserUseCase';
@@ -7,35 +8,63 @@ import { BcryptPasswordHasher } from './infrastructure/service-adapters/BcryptPa
 import { prisma } from './infrastructure/database/prisma/PrismaClientService';
 import { errorHandlerMiddleware } from './presentation/http/middlewares/ErrorMiddlewares';
 import { WelcomeEmailListener } from './application/event-listeners/WelcomeEmailListener';
+import { connectToMongoDB } from './infrastructure/database/mongoose/MongooseConnectionService';
+import { readFileSync } from 'fs';
+import path from 'path';
+import { ApolloServer } from '@apollo/server';
+import cors from 'cors';
+import { discussionResolvers } from './presentation/graphql/resolvers/DiscussionResolvers';
 
-const app = express();
-const port = process.env.PORT || 3000;
-app.use(express.json());
+async function startServer() {
+  const app = express();
+  const port = process.env.PORT || 3000;
 
-app.get('/health', (req, res) => {
-  res.send('Hello from DevConnect!');
-});
+  await connectToMongoDB();
+  const typeDefs = readFileSync(
+    path.join(__dirname, './presentation/graphql/schemas/DiscussionSchema.graphql'),
+    'utf-8',
+  );
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers: discussionResolvers,
+  });
 
-// Event Listeners
-new WelcomeEmailListener();
+  await apolloServer.start();
 
-// TODO: Refactor Dependency Injection
+  console.log('🚀 Started Apollo Server');
 
-// Dependencies
-const userRepository = new PrismaUserRepository(prisma);
-const passwordHasherService = new BcryptPasswordHasher();
-const registerUserUseCase = new RegisterUserUseCase(userRepository, passwordHasherService);
+  app.use(cors());
+  app.use(express.json());
 
-// Controllers
-const identityController = new IdentityController(registerUserUseCase);
+  app.get('/health', (req, res) => {
+    res.send('Hello from DevConnect!');
+  });
 
-// Routes
-const identityRoutes = createIdentityRoutes(identityController);
-app.use('/api/v1/identity', identityRoutes);
+  // Event Listeners
+  new WelcomeEmailListener();
 
-// Middlewares
-app.use(errorHandlerMiddleware);
+  // TODO: Refactor Dependency Injection
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+  // Dependencies
+  const userRepository = new PrismaUserRepository(prisma);
+  const passwordHasherService = new BcryptPasswordHasher();
+  const registerUserUseCase = new RegisterUserUseCase(userRepository, passwordHasherService);
+
+  // Controllers
+  const identityController = new IdentityController(registerUserUseCase);
+
+  // Routes
+  const identityRoutes = createIdentityRoutes(identityController);
+  app.use('/api/v1/identity', identityRoutes);
+  app.use('/graphql', expressMiddleware(apolloServer));
+
+  // Middlewares
+  app.use(errorHandlerMiddleware);
+
+  app.listen(port, () => {
+    console.log(`📡 Server is running on http://localhost:${port}`);
+    console.log(`🚀 GraphQL Endpoint available in http://localhost:${port}/graphql`);
+  });
+}
+
+startServer();
