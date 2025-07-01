@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { IdentityController } from './controllers/identity/IdentityController';
 import { validateRequest } from './middlewares/ValidationMiddlewares';
-import { registerUserRequestSchema } from './schemas/IdentitySchemas';
+import {
+  emailPasswordLoginRequestSchema,
+  registerUserRequestSchema,
+} from './schemas/IdentitySchemas';
 
 export const createIdentityRoutes = (identityController: IdentityController): Router => {
   const router = Router();
@@ -10,6 +13,12 @@ export const createIdentityRoutes = (identityController: IdentityController): Ro
     '/register',
     validateRequest(registerUserRequestSchema),
     identityController.registerUser.bind(identityController),
+  );
+
+  router.post(
+    '/login',
+    validateRequest(emailPasswordLoginRequestSchema),
+    identityController.login.bind(identityController),
   );
 
   return router;

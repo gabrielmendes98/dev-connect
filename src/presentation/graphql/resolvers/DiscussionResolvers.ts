@@ -16,6 +16,7 @@ export const discussionResolvers = {
   },
   Mutation: {
     startDiscussion: async (_: any, { input }: { input: any }, context: any) => {
+      console.log(context);
       // TODO: Get user id from authentication context
       const userId = '12312312312';
 

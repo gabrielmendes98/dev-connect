@@ -23,3 +23,9 @@ export class ForbiddenError extends DomainError {
     super(message, 403);
   }
 }
+
+export class InternalServerError extends DomainError {
+  constructor(message: string = 'Internal Server Error.') {
+    super(message, 500);
+  }
+}

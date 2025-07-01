@@ -14,6 +14,10 @@ import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import cors from 'cors';
 import { discussionResolvers } from './presentation/graphql/resolvers/DiscussionResolvers';
+import { AuthenticateUserUseCase } from './application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
+import { EmailPasswordStrategy } from './infrastructure/auth/EmailPasswordStrategy';
+import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenService';
+import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
 
 async function startServer() {
   const app = express();
@@ -49,9 +53,18 @@ async function startServer() {
   const userRepository = new PrismaUserRepository(prisma);
   const passwordHasherService = new BcryptPasswordHasher();
   const registerUserUseCase = new RegisterUserUseCase(userRepository, passwordHasherService);
+  const emailPasswordStrategy = new EmailPasswordStrategy(userRepository, passwordHasherService);
+  const tokenService = new JwtTokenService();
+  const authenticateWithEmailPasswordUserUseCase = new AuthenticateUserUseCase(
+    emailPasswordStrategy,
+    tokenService,
+  );
 
   // Controllers
-  const identityController = new IdentityController(registerUserUseCase);
+  const identityController = new IdentityController(
+    registerUserUseCase,
+    authenticateWithEmailPasswordUserUseCase,
+  );
 
   // Routes
   const identityRoutes = createIdentityRoutes(identityController);
