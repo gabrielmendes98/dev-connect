@@ -12,7 +12,8 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "seed:tags": "ts-node ./scripts/seed-tags.ts"
   },
   "repository": {
     "type": "git",

@@ -18,6 +18,11 @@ export class TagEntity extends Entity {
     return new TagEntity(id, tagName);
   }
 
+  public static fromPersistence(idString: string, name: string) {
+    const id = IdVO.fromString(idString);
+    return new TagEntity(id, name);
+  }
+
   public getName() {
     return this.name;
   }

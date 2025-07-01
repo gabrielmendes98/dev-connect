@@ -1,20 +1,51 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { IdVO } from '../../../../domain/shared/value-objects/IdVO';
 
-export interface IDiscussionModel extends Document {
+export interface IDiscussionBaseModel {
+  _id: string;
   title: string;
   description: string;
-  createdByUserId: IdVO;
-  tags: mongoose.Schema.Types.ObjectId[];
+  imageUrl: string | null;
+  createdByUserId: string;
+  tags: string[];
   comments: {
-    authorId: IdVO;
+    _id: string;
+    authorId: string;
     text: string;
     createdAt: Date;
   }[];
 }
 
-const DiscussionSchema: Schema = new Schema(
+export type IDiscussionModel = Document & IDiscussionBaseModel;
+
+const CommentSubSchema: Schema = new Schema(
   {
+    _id: { type: String, required: true },
+    authorId: { type: String, required: true },
+    text: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    _id: false,
+    versionKey: false,
+    timestamps: {
+      createdAt: true,
+      updatedAt: false,
+    },
+  },
+);
+
+export const DiscussionSchema: Schema = new Schema(
+  {
+    _id: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -23,31 +54,25 @@ const DiscussionSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    imageUrl: {
+      type: String,
+      required: false,
+    },
     createdByUserId: {
       type: String,
       required: true,
     },
     tags: [
       {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Tag',
       },
     ],
-    comments: [
-      {
-        authorId: { type: String, required: true },
-        text: {
-          type: String,
-          required: true,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+    comments: [CommentSubSchema],
   },
   {
+    _id: false,
+    versionKey: false,
     timestamps: true,
   },
 );

@@ -10,7 +10,6 @@ export class DiscussionEntity extends AggregateRoot {
     private description: string,
     private imageUrl: string | null,
     private comments: CommentEntity[],
-    private likeCount: number,
     private tagIds: IdVO[],
     private readonly createdByUserId: IdVO,
   ) {
@@ -37,7 +36,27 @@ export class DiscussionEntity extends AggregateRoot {
     const id = IdVO.create();
     const userId = IdVO.fromString(createdByUserId);
     const tagIds = tagIdStrings.map((id) => IdVO.fromString(id));
-    return new DiscussionEntity(id, title, description, imageUrl, [], 0, tagIds, userId);
+    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId);
+  }
+
+  public static fromPersistenceWithoutLoadingComments(
+    idString: string,
+    title: string,
+    description: string,
+    imageUrl: string | null,
+    tagIdStrings: string[],
+    createdByUserId: string,
+  ) {
+    const id = IdVO.fromString(idString);
+    const userId = IdVO.fromString(createdByUserId);
+    const tagIds = tagIdStrings.map((id) => IdVO.fromString(id));
+    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId);
+  }
+
+  public addComment(authorId: string, text: string) {
+    const newComment = CommentEntity.addComment(authorId, text);
+    this.comments.push(newComment);
+    // TODO: Add domain event to notify discussion owner
   }
 
   public getTitle(): string {
@@ -56,15 +75,11 @@ export class DiscussionEntity extends AggregateRoot {
     return this.comments;
   }
 
-  public getLikeCount(): number {
-    return this.likeCount;
-  }
-
   public getTags(): IdVO[] {
     return this.tagIds;
   }
 
-  public wasCreatedBy(): IdVO {
+  public getCreatedByUserId(): IdVO {
     return this.createdByUserId;
   }
 }

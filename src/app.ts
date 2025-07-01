@@ -19,6 +19,7 @@ import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenServi
 import { createPublicRoutes } from './presentation/http/routes/PublicRoutes';
 import { createPrivateRoutes } from './presentation/http/routes/PrivateRoutes';
 import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
+import { graphqlAuthContext } from './presentation/graphql/context/AuthContext';
 
 async function startServer() {
   const app = express();
@@ -73,7 +74,14 @@ async function startServer() {
 
   app.use('/api/v1', publicRoutes);
   app.use('/api/v1', authMiddleware, privateRoutes);
-  app.use('/graphql', expressMiddleware(apolloServer));
+
+  // TODO: Add middleware to resolvers
+  app.use(
+    '/graphql',
+    expressMiddleware(apolloServer, {
+      context: graphqlAuthContext,
+    }),
+  );
 
   // Middlewares
   app.use(errorHandlerMiddleware);
