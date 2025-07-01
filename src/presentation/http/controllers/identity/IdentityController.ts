@@ -43,7 +43,7 @@ export class IdentityController {
       const { email, password } = req.body;
       const result = await this.authenticateUserUseCase.execute({
         email,
-        password,
+        plainPassword: password,
       });
       ApiResponse.success(res, result, 200);
       return;

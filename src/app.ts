@@ -1,6 +1,5 @@
 import express from 'express';
 import { expressMiddleware } from '@as-integrations/express5';
-import { createIdentityRoutes } from './presentation/http/routes';
 import { IdentityController } from './presentation/http/controllers/identity/IdentityController';
 import { RegisterUserUseCase } from './application/identity/use-cases/register-user/RegisterUserUseCase';
 import { PrismaUserRepository } from './infrastructure/database/repositories/PrismaUserRepository';
@@ -17,6 +16,8 @@ import { discussionResolvers } from './presentation/graphql/resolvers/Discussion
 import { AuthenticateUserUseCase } from './application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
 import { EmailPasswordStrategy } from './infrastructure/auth/EmailPasswordStrategy';
 import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenService';
+import { createPublicRoutes } from './presentation/http/routes/PublicRoutes';
+import { createPrivateRoutes } from './presentation/http/routes/PrivateRoutes';
 import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
 
 async function startServer() {
@@ -67,8 +68,11 @@ async function startServer() {
   );
 
   // Routes
-  const identityRoutes = createIdentityRoutes(identityController);
-  app.use('/api/v1/identity', identityRoutes);
+  const publicRoutes = createPublicRoutes(identityController);
+  const privateRoutes = createPrivateRoutes(identityController);
+
+  app.use('/api/v1', publicRoutes);
+  app.use('/api/v1', authMiddleware, privateRoutes);
   app.use('/graphql', expressMiddleware(apolloServer));
 
   // Middlewares
