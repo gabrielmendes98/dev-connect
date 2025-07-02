@@ -25,7 +25,7 @@ export class CreateDiscussionUseCase
       createdByUserId: newDiscussion.getCreatedByUserId().getValue(),
       description: newDiscussion.getDescription(),
       title: newDiscussion.getTitle(),
-      tags: newDiscussion.getTags().map((tag) => tag.getValue()),
+      tagIds: newDiscussion.getTagIds().map((tag) => tag.getValue()),
     };
   }
 }

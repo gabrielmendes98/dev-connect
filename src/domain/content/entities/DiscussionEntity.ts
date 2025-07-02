@@ -75,7 +75,7 @@ export class DiscussionEntity extends AggregateRoot {
     return this.comments;
   }
 
-  public getTags(): IdVO[] {
+  public getTagIds(): IdVO[] {
     return this.tagIds;
   }
 

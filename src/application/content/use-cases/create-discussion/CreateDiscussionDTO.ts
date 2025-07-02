@@ -11,6 +11,6 @@ export type CreateDiscussionOutput = Promise<{
   title: string;
   description: string;
   createdByUserId: string;
-  tags: string[];
+  tagIds: string[];
   comments: string[];
 }>;

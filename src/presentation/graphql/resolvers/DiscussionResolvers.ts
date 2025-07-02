@@ -4,6 +4,7 @@ import { GraphQLError } from 'graphql';
 import { CreateDiscussionUseCase } from '../../../application/content/use-cases/create-discussion/CreateDiscussionUseCase';
 import { MongoDiscussionRepository } from '../../../infrastructure/database/repositories/MongoDiscussionRepository';
 import { GraphQLAuthContext } from '../context/AuthContext';
+import { MongoTagRepository } from '../../../infrastructure/database/repositories/MongoTagRepository';
 
 export const discussionResolvers = {
   Query: {
@@ -54,6 +55,21 @@ export const discussionResolvers = {
           extensions: { code: 'INTERNAL_SERVER_ERROR' },
         });
       }
+    },
+  },
+  Discussion: {
+    tags: async (parent: { tagIds: string[] }) => {
+      if (!parent.tagIds || parent.tagIds.length === 0) {
+        return [];
+      }
+
+      // TODO: Inject tag repository
+      const tagRepository = new MongoTagRepository();
+      const tags = await tagRepository.findByIds(parent.tagIds);
+      return tags.map((tag) => ({
+        id: tag.getId().getValue(),
+        name: tag.getName(),
+      }));
     },
   },
 };

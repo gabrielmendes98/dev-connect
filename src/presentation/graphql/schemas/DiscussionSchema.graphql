@@ -1,7 +1,6 @@
 type Tag {
   id: ID!
   name: String!
-  usageCount: Int!
 }
 
 type Comment {

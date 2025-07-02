@@ -9,7 +9,7 @@ export class DiscussionMapper {
       description: entity.getDescription(),
       imageUrl: entity.getImageUrl(),
       createdByUserId: entity.getCreatedByUserId().getValue(),
-      tags: entity.getTags().map((tagId) => tagId.getValue()),
+      tags: entity.getTagIds().map((tagId) => tagId.getValue()),
       comments: entity.getComments().map((comment) => ({
         _id: comment.getId().getValue(),
         authorId: comment.getAuthorId().getValue(),
