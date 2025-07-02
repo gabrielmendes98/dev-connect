@@ -21,7 +21,7 @@ export class ProfileEntity extends Entity {
     this.username = username;
   }
 
-  public static async createInitialProfile(userId: IdVO): Promise<ProfileEntity> {
+  public static createInitialProfile(userId: IdVO): ProfileEntity {
     const profileId = IdVO.create();
     return new ProfileEntity(profileId, userId, null, null, null, null, null);
   }
@@ -102,6 +102,10 @@ export class ProfileEntity extends Entity {
   public updateName(newName: string) {
     this.validateNewName(newName);
     this.name = newName;
+  }
+
+  public updateAvatarUrl(newAvatarUrl: string) {
+    this.avatarUrl = newAvatarUrl;
   }
 
   public updateUsername(newUsername: string) {

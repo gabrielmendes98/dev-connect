@@ -19,6 +19,8 @@ import { createPublicRoutes } from './presentation/http/routes/PublicRoutes';
 import { createPrivateRoutes } from './presentation/http/routes/PrivateRoutes';
 import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
 import { graphqlAuthContext } from './presentation/graphql/context/AuthContext';
+import { setupPassport } from './infrastructure/auth/PassportConfig';
+import passport from 'passport';
 
 async function startServer() {
   const app = express();
@@ -64,6 +66,10 @@ async function startServer() {
     userRepository,
     passwordHasherService,
   );
+
+  // Configs
+  setupPassport();
+  app.use(passport.initialize());
 
   // Routes
   const publicRoutes = createPublicRoutes(identityController);

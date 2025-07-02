@@ -5,6 +5,7 @@ import {
   emailPasswordLoginRequestSchema,
   registerUserRequestSchema,
 } from '../schemas/IdentitySchemas';
+import passport from 'passport';
 
 export const createIdentityRoutes = (
   identityController: IdentityController,
@@ -27,6 +28,17 @@ export const createIdentityRoutes = (
       '/login',
       validateRequest(emailPasswordLoginRequestSchema),
       identityController.login.bind(identityController),
+    );
+
+    router.get(
+      '/auth/google',
+      passport.authenticate('google', { scope: ['profile', 'email'], session: false }),
+    );
+
+    router.get(
+      '/auth/google/callback',
+      passport.authenticate('google', { failureRedirect: '/login-failed', session: false }),
+      identityController.loginWithGoogle.bind(identityController),
     );
   }
 

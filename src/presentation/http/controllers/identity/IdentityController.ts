@@ -9,6 +9,10 @@ import { AuthenticateUserUseCase } from '../../../../application/identity/use-ca
 import { AuthWithEmailAndPasswordService } from '../../../../application/identity/services/auth-service/AuthWithEmailAndPasswordService';
 import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
 import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
+import {
+  AuthWithGoogleCredentials,
+  AuthWithGoogleService,
+} from '../../../../application/identity/services/auth-service/AuthWithGoogleService';
 
 export class IdentityController {
   constructor(
@@ -57,6 +61,27 @@ export class IdentityController {
       });
       ApiResponse.success(res, result, 200);
       return;
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async loginWithGoogle(req: Request, res: Response, next: NextFunction) {
+    try {
+      // 'req.user' now contains the GoogleProfileData object that we passed in the 'done()'.
+      const googleProfile = req.user as AuthWithGoogleCredentials;
+
+      const authWithGoogleService = new AuthWithGoogleService(
+        this.userRepository,
+        this.passwordService,
+      );
+
+      const { token } = await this.authenticateUserUseCase.execute({
+        authService: authWithGoogleService,
+        credentials: googleProfile,
+      });
+
+      res.redirect(`${process.env.WEB_APP_URL}?token=${token}`);
     } catch (error) {
       next(error);
     }

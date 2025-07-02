@@ -25,7 +25,7 @@ export class RegisterUserUseCase implements UseCase<RegisterUserInput, RegisterU
       this.passwordHasherService,
     );
 
-    const profile = await ProfileEntity.createInitialProfile(user.getId());
+    const profile = ProfileEntity.createInitialProfile(user.getId());
 
     await this.userRepository.createWithProfile(user, profile);
 
