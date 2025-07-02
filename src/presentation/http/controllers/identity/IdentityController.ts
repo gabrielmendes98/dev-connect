@@ -6,13 +6,16 @@ import {
 } from '../../schemas/IdentitySchemas';
 import { ApiResponse } from '../../responses/ApiResponse';
 import { AuthenticateUserUseCase } from '../../../../application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
+import { AuthWithEmailAndPasswordService } from '../../../../application/identity/services/auth-service/AuthWithEmailAndPasswordService';
+import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
+import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
 
 export class IdentityController {
   constructor(
     private readonly registerUserUseCase: RegisterUserUseCase,
-    // TODO: Type here
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private readonly authenticateUserUseCase: AuthenticateUserUseCase<any>,
+    private readonly authenticateUserUseCase: AuthenticateUserUseCase,
+    private readonly userRepository: UserRepository,
+    private readonly passwordService: PasswordHasherService,
   ) {}
 
   public async registerUser(
@@ -41,9 +44,16 @@ export class IdentityController {
   ) {
     try {
       const { email, password } = req.body;
+      const authWithEmailAndPasswordService = new AuthWithEmailAndPasswordService(
+        this.userRepository,
+        this.passwordService,
+      );
       const result = await this.authenticateUserUseCase.execute({
-        email,
-        plainPassword: password,
+        authService: authWithEmailAndPasswordService,
+        credentials: {
+          email,
+          plainPassword: password,
+        },
       });
       ApiResponse.success(res, result, 200);
       return;
