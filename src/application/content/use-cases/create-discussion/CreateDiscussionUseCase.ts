@@ -19,6 +19,13 @@ export class CreateDiscussionUseCase
 
     await this.discussionRepository.save(newDiscussion);
 
-    return void 0;
+    return {
+      id: newDiscussion.getId().getValue(),
+      comments: [],
+      createdByUserId: newDiscussion.getCreatedByUserId().getValue(),
+      description: newDiscussion.getDescription(),
+      title: newDiscussion.getTitle(),
+      tags: newDiscussion.getTags().map((tag) => tag.getValue()),
+    };
   }
 }

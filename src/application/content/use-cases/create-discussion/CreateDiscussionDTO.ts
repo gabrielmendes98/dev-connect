@@ -6,4 +6,11 @@ export interface CreateDiscussionInput {
   tagIds: string[];
 }
 
-export type CreateDiscussionOutput = Promise<void>;
+export type CreateDiscussionOutput = Promise<{
+  id: string;
+  title: string;
+  description: string;
+  createdByUserId: string;
+  tags: string[];
+  comments: string[];
+}>;

@@ -18,8 +18,14 @@ type Discussion {
   createdByUserId: ID!
   tags: [Tag!]!
   comments: [Comment!]!
-  createdAt: String!
-  updatedAt: String!
+  # createdAt: String!
+  # updatedAt: String!
+}
+
+type StartDiscussionPayload {
+  success: Boolean!
+  message: String!
+  discussion: Discussion
 }
 
 input StartDiscussionInput {
@@ -34,5 +40,5 @@ type Query {
 }
 
 type Mutation {
-  startDiscussion(input: StartDiscussionInput!): Discussion!
+  startDiscussion(input: StartDiscussionInput!): StartDiscussionPayload!
 }
