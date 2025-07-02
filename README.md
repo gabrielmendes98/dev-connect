@@ -31,6 +31,7 @@ In the future, maybe I will include some more things, like:
 - Improve Dependency Injection and remove it from app.ts
 - Add more tests
 - Improve error handling on usecases
+- Implement GraphQL DataLoader for Discussion.tags resolver
 
 ## The domain
 
