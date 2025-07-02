@@ -32,6 +32,8 @@ In the future, maybe I will include some more things, like:
 - Add more tests
 - Improve error handling on usecases
 - Implement GraphQL DataLoader for Discussion.tags resolver
+- Refactor my bootstrap and DI system
+- Resolve all TODOs
 
 ## The domain
 
