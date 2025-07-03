@@ -34,6 +34,12 @@ In the future, maybe I will include some more things, like:
 - Resolve all TODOs
 - Add logger and remove console.log
 
+## TODO Deploy
+
+- Config AWS structure with terraform
+- Create and config Jenkins Pipelines
+- Config automated deploys when push to master
+
 ## The domain
 
 **"DevConnect - A Connection Platform for Developers"**
