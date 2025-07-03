@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-commit validations..."
+
+echo "🔍 Checking types with TypeScript..."
+npm run build:check
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript compilation error. Commit aborted."
+    exit 1
+fi
+echo "✅ Types checked successfully."
+
+echo "💅 Running ESLint and tests on modified files..."
+npx lint-staged
+if [ $? -ne 0 ]; then
+    echo "❌ Error in ESLint or tests. Commit aborted."
+    exit 1
+fi
+
+echo "🎉 All validations passed! Committing..."
