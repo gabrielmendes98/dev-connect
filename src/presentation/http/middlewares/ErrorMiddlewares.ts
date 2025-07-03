@@ -10,6 +10,7 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (err, req, res, _next
     ApiResponse.error(res, {
       statusCode: err.statusCode,
       message: err.message,
+      details: err.details,
     });
     return;
   }

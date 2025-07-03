@@ -38,7 +38,7 @@ export class AuthWithGoogleService implements AuthService<AuthWithGoogleCredenti
     const newRandomPassword = PlainPasswordVO.generateRandomPassword();
     const newUser = await UserEntity.registerNewUser(
       email,
-      newRandomPassword,
+      newRandomPassword.getValue(),
       this.passwordHasherService,
     );
 

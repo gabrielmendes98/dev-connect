@@ -1,23 +1,27 @@
-import { ValueObjectError } from '../errors/ValueObjectError';
+import { ErrorNotification } from '../error-notification/ErrorNotification';
 
 export class PlainPasswordVO {
-  private constructor(private readonly value: string) {}
+  private constructor(private readonly value: string) {
+    const errorNotification = new ErrorNotification('Password');
+
+    if (!this.value) {
+      errorNotification.addError('Password cannot be empty');
+    }
+
+    if (this.value.length < PlainPasswordVO.validationRules.PASSWORD_MIN_LENGTH) {
+      errorNotification.addError(
+        `Password must be at least ${PlainPasswordVO.validationRules.PASSWORD_MIN_LENGTH} characters long`,
+      );
+    }
+
+    errorNotification.check();
+  }
 
   public static validationRules = {
     PASSWORD_MIN_LENGTH: 6,
   };
 
   public static create(password: string): PlainPasswordVO {
-    if (!password) {
-      throw new ValueObjectError('Password cannot be empty.');
-    }
-
-    if (password.length < PlainPasswordVO.validationRules.PASSWORD_MIN_LENGTH) {
-      throw new ValueObjectError(
-        `Password must be at least ${PlainPasswordVO.validationRules.PASSWORD_MIN_LENGTH} characters long.`,
-      );
-    }
-
     return new PlainPasswordVO(password);
   }
 
@@ -27,7 +31,7 @@ export class PlainPasswordVO {
     for (let i = 0; i < 10; i++) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    return result;
+    return new PlainPasswordVO(result);
   }
 
   public getValue() {

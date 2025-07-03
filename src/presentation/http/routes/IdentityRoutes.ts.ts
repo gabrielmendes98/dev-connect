@@ -20,7 +20,7 @@ export const createIdentityRoutes = (
   } else {
     router.post(
       '/register',
-      validateRequest(registerUserRequestSchema),
+      // validateRequest(registerUserRequestSchema),
       identityController.registerUser.bind(identityController),
     );
 

@@ -14,6 +14,7 @@ This project was created to practice some concepts and skills, like:
 - Domain Driven Design (DDD)
 - Testing
 - Data validation
+  - Added an adapted version of Notification pattern
 
 In the future, maybe I will include some more things, like:
 
@@ -24,8 +25,6 @@ In the future, maybe I will include some more things, like:
 ## TODO
 
 - Add notification pattern for errors to avoid throwing errors one by one
-- Add pre-commit hook
-- Refactor architecture drawing to add new presentation layer and reflect domain changes
 - Improve Dependency Injection and remove it from app.ts
 - Add more tests
 - Improve error handling on usecases
@@ -33,6 +32,7 @@ In the future, maybe I will include some more things, like:
 - Refactor my bootstrap and DI system
 - Resolve all TODOs
 - Add logger and remove console.log
+- Refactor architecture drawing to add new presentation layer and reflect domain changes
 
 ## TODO Deploy
 

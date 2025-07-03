@@ -98,8 +98,4 @@ export class UserEntity extends AggregateRoot {
     const newHashedPasswordString = await hasher.hash(plainPassword.getValue());
     this.passwordHash = HashedPasswordVO.fromString(newHashedPasswordString);
   }
-
-  public async authenticate() {
-    // TODO: Implement password authentication here
-  }
 }
