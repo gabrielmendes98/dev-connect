@@ -23,17 +23,16 @@ In the future, maybe I will include some more things, like:
 
 ## TODO
 
-- Add absolute imports
-- Block lower layers to import from upper layers
 - Add notification pattern for errors to avoid throwing errors one by one
 - Add pre-commit hook
-- Refactor architecture drawing to add new presentation layer
+- Refactor architecture drawing to add new presentation layer and reflect domain changes
 - Improve Dependency Injection and remove it from app.ts
 - Add more tests
 - Improve error handling on usecases
 - Implement GraphQL DataLoader for Discussion.tags resolver
 - Refactor my bootstrap and DI system
 - Resolve all TODOs
+- Add logger and remove console.log
 
 ## The domain
 
