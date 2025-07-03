@@ -25,12 +25,12 @@ In the future, maybe I will include some more things, like:
 ## TODO
 
 - Improve Dependency Injection and remove it from app.ts
-- Add more tests
-- Improve error handling on usecases
-- Implement GraphQL DataLoader for Discussion.tags resolver
 - Refactor my bootstrap and DI system
+- Improve error handling on usecases
 - Resolve all TODOs
-- Add logger and remove console.log
+- Implement GraphQL DataLoader for Discussion.tags resolver
+- Add Winstonlogger and remove console.log
+- Add more tests
 - Refactor architecture drawing to add new presentation layer and reflect domain changes
 
 ## TODO Deploy
