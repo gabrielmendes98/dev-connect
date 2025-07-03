@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register --files src/app.ts'",
+    "dev": "nodemon",
     "build": "tsc",
     "serve": "yarn build && yarn start",
     "lint": "eslint src/**/*.ts",
