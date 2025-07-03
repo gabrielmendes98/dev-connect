@@ -1,18 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
-import { RegisterUserUseCase } from '../../../../application/identity/use-cases/register-user/RegisterUserUseCase';
-import {
-  EmailPasswordLoginRequestSchema,
-  RegisterUserRequestSchema,
-} from '../../schemas/IdentitySchemas';
-import { ApiResponse } from '../../responses/ApiResponse';
-import { AuthenticateUserUseCase } from '../../../../application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
-import { AuthWithEmailAndPasswordService } from '../../../../application/identity/services/auth-service/AuthWithEmailAndPasswordService';
-import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
-import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
+import { UserRepository } from '@domain/identity/repositories/UserRepository';
+import { PasswordHasherService } from '@domain/identity/services/PasswordHasherService';
+import { AuthWithEmailAndPasswordService } from '@application/identity/services/auth-service/AuthWithEmailAndPasswordService';
 import {
   AuthWithGoogleCredentials,
   AuthWithGoogleService,
-} from '../../../../application/identity/services/auth-service/AuthWithGoogleService';
+} from '@application/identity/services/auth-service/AuthWithGoogleService';
+import { AuthenticateUserUseCase } from '@application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
+import { RegisterUserUseCase } from '@application/identity/use-cases/register-user/RegisterUserUseCase';
+import { ApiResponse } from '@presentation/http/responses/ApiResponse';
+import {
+  EmailPasswordLoginRequestSchema,
+  RegisterUserRequestSchema,
+} from '@presentation/http/schemas/IdentitySchemas';
 
 export class IdentityController {
   constructor(

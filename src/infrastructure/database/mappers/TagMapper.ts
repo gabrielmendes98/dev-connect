@@ -1,4 +1,4 @@
-import { TagEntity } from '../../../domain/content/entities/TagEntity';
+import { TagEntity } from '@domain/content/entities/TagEntity';
 import { ITagModel } from '../mongoose/models/TagModel';
 
 export class TagMapper {

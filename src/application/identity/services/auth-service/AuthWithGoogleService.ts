@@ -1,10 +1,10 @@
-import { ProfileEntity } from '../../../../domain/identity/entities/ProfileEntity';
-import { UserEntity } from '../../../../domain/identity/entities/UserEntity';
-import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
-import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
-import { UnauthorizedError } from '../../../../domain/shared/errors/HttpErrors';
-import { DomainHub } from '../../../../domain/shared/events/DomainHub';
-import { PlainPasswordVO } from '../../../../domain/shared/value-objects/PlainPasswordVO';
+import { ProfileEntity } from '@domain/identity/entities/ProfileEntity';
+import { UserEntity } from '@domain/identity/entities/UserEntity';
+import { UserRepository } from '@domain/identity/repositories/UserRepository';
+import { PasswordHasherService } from '@domain/identity/services/PasswordHasherService';
+import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
+import { DomainHub } from '@domain/shared/events/DomainHub';
+import { PlainPasswordVO } from '@domain/shared/value-objects/PlainPasswordVO';
 import { AuthService } from './AuthService';
 
 export interface AuthWithGoogleCredentials {

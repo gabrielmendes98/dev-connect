@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { JwtTokenService } from '../../../infrastructure/service-adapters/JwtTokenService';
-import { TokenPayload } from '../../../domain/identity/services/TokenService';
+import { TokenPayload } from '@domain/identity/services/TokenService';
+import { JwtTokenService } from '@infrastructure/service-adapters/JwtTokenService';
 
 export interface GraphQLAuthContext {
   auth: TokenPayload | null;
@@ -23,8 +23,8 @@ export const graphqlAuthContext = async ({
         return { auth: payload };
       }
     }
-  } catch (_) {
-    console.log('No valid token found in GraphQL request.');
+  } catch (error) {
+    console.log('graphqlAuth: No valid token found in GraphQL request:', error);
   }
 
   return { auth: null };

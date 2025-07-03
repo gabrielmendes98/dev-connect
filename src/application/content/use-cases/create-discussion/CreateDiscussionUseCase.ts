@@ -1,6 +1,6 @@
-import { DiscussionEntity } from '../../../../domain/content/entities/DiscussionEntity';
-import { DiscussionRepository } from '../../../../domain/content/repositories/DiscussionRepository';
-import { UseCase } from '../../../shared/UseCase';
+import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
+import { DiscussionRepository } from '@domain/content/repositories/DiscussionRepository';
+import { UseCase } from '@application/shared/UseCase';
 import { CreateDiscussionInput, CreateDiscussionOutput } from './CreateDiscussionDTO';
 
 export class CreateDiscussionUseCase

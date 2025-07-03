@@ -1,6 +1,6 @@
-import { Entity } from '../../shared/core/Entity';
-import { EntityError } from '../../shared/errors/EntityError';
-import { IdVO } from '../../shared/value-objects/IdVO';
+import { Entity } from '@domain/shared/core/Entity';
+import { EntityError } from '@domain/shared/errors/EntityError';
+import { IdVO } from '@domain/shared/value-objects/IdVO';
 
 export class ProfileEntity extends Entity {
   private constructor(

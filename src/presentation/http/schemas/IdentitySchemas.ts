@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { PlainPasswordVO } from '../../../domain/shared/value-objects/PlainPasswordVO';
-import { EmailVO } from '../../../domain/shared/value-objects/EmailVO';
+import { EmailVO } from '@domain/shared/value-objects/EmailVO';
+import { PlainPasswordVO } from '@domain/shared/value-objects/PlainPasswordVO';
 
 export const registerUserRequestSchema = z.object({
   body: z.object({

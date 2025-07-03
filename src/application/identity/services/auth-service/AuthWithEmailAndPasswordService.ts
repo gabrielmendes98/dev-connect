@@ -1,7 +1,7 @@
-import { UserEntity } from '../../../../domain/identity/entities/UserEntity';
-import { UserRepository } from '../../../../domain/identity/repositories/UserRepository';
-import { PasswordHasherService } from '../../../../domain/identity/services/PasswordHasherService';
-import { UnauthorizedError } from '../../../../domain/shared/errors/HttpErrors';
+import { UserEntity } from '@domain/identity/entities/UserEntity';
+import { UserRepository } from '@domain/identity/repositories/UserRepository';
+import { PasswordHasherService } from '@domain/identity/services/PasswordHasherService';
+import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
 import { AuthService } from './AuthService';
 
 interface AuthWithEmailAndPasswordCredentials {

@@ -1,5 +1,5 @@
-import { DiscussionEntity } from '../../../domain/content/entities/DiscussionEntity';
-import { DiscussionRepository } from '../../../domain/content/repositories/DiscussionRepository';
+import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
+import { DiscussionRepository } from '@domain/content/repositories/DiscussionRepository';
 import { DiscussionMapper } from '../mappers/DiscussionMapper';
 import { DiscussionModel } from '../mongoose/models/DiscussionModel';
 

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
-import { PasswordHasherService } from '../../domain/identity/services/PasswordHasherService';
-import { InternalServerError } from '../../domain/shared/errors/HttpErrors';
+import { PasswordHasherService } from '@domain/identity/services/PasswordHasherService';
+import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 
 export class BcryptPasswordHasher implements PasswordHasherService {
   private readonly saltRounds: number;

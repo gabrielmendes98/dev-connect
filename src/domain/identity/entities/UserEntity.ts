@@ -1,11 +1,11 @@
-import { EntityError } from '../../shared/errors/EntityError';
-import { EmailVO } from '../../shared/value-objects/EmailVO';
-import { HashedPasswordVO } from '../../shared/value-objects/HashedPasswordVO';
-import { IdVO } from '../../shared/value-objects/IdVO';
-import { PlainPasswordVO } from '../../shared/value-objects/PlainPasswordVO';
-import { PasswordHasherService } from '../services/PasswordHasherService';
-import { AggregateRoot } from '../../shared/core/AggregateRoot';
+import { AggregateRoot } from '@domain/shared/core/AggregateRoot';
+import { EntityError } from '@domain/shared/errors/EntityError';
+import { EmailVO } from '@domain/shared/value-objects/EmailVO';
+import { HashedPasswordVO } from '@domain/shared/value-objects/HashedPasswordVO';
+import { IdVO } from '@domain/shared/value-objects/IdVO';
+import { PlainPasswordVO } from '@domain/shared/value-objects/PlainPasswordVO';
 import { UserRegisteredEvent } from '../events/UserRegisteredEvent';
+import { PasswordHasherService } from '../services/PasswordHasherService';
 
 export class UserEntity extends AggregateRoot {
   private email: EmailVO;

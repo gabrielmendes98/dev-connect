@@ -1,8 +1,8 @@
 import { ErrorRequestHandler } from 'express';
-import { BaseError } from '../../../domain/shared/errors/BaseError';
+import { BaseError } from '@domain/shared/errors/BaseError';
 import { ApiResponse } from '../responses/ApiResponse';
 
-export const errorHandlerMiddleware: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandlerMiddleware: ErrorRequestHandler = (err, req, res, _next) => {
   // TODO: Change for Winston logger
   console.error(`[Error] ${err.stack}`);
 

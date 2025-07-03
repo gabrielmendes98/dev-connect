@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
-import { UnauthorizedError } from '../../domain/shared/errors/HttpErrors';
-import { AuthWithGoogleCredentials } from '../../application/identity/services/auth-service/AuthWithGoogleService';
+import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
+import { AuthWithGoogleCredentials } from '@application/identity/services/auth-service/AuthWithGoogleService';
 
 export const setupPassport = () => {
   passport.use(

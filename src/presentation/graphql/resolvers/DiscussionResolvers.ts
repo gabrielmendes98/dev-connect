@@ -1,10 +1,10 @@
 // TODO: Remove this and type resolvers
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLError } from 'graphql';
-import { CreateDiscussionUseCase } from '../../../application/content/use-cases/create-discussion/CreateDiscussionUseCase';
-import { MongoDiscussionRepository } from '../../../infrastructure/database/repositories/MongoDiscussionRepository';
+import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
+import { MongoDiscussionRepository } from '@infrastructure/database/repositories/MongoDiscussionRepository';
+import { MongoTagRepository } from '@infrastructure/database/repositories/MongoTagRepository';
 import { GraphQLAuthContext } from '../context/AuthContext';
-import { MongoTagRepository } from '../../../infrastructure/database/repositories/MongoTagRepository';
 
 export const discussionResolvers = {
   Query: {

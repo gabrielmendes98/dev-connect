@@ -1,5 +1,5 @@
 import { Profile as PrismaProfile } from '@prisma/client';
-import { ProfileEntity } from '../../../domain/identity/entities/ProfileEntity';
+import { ProfileEntity } from '@domain/identity/entities/ProfileEntity';
 
 export class ProfileMapper {
   public static toPersistence(

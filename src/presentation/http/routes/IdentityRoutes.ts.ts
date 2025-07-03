@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import passport from 'passport';
 import { IdentityController } from '../controllers/identity/IdentityController';
 import { validateRequest } from '../middlewares/ValidationMiddlewares';
 import {
   emailPasswordLoginRequestSchema,
   registerUserRequestSchema,
 } from '../schemas/IdentitySchemas';
-import passport from 'passport';
 
 export const createIdentityRoutes = (
   identityController: IdentityController,

@@ -1,6 +1,6 @@
-import { UserRegisteredEvent } from '../../domain/identity/events/UserRegisteredEvent';
-import { DomainHub } from '../../domain/shared/events/DomainHub';
-import { EventHandler } from '../../domain/shared/events/EventHandler';
+import { UserRegisteredEvent } from '@domain/identity/events/UserRegisteredEvent';
+import { DomainHub } from '@domain/shared/events/DomainHub';
+import { EventHandler } from '@domain/shared/events/EventHandler';
 
 export class WelcomeEmailListener implements EventHandler<UserRegisteredEvent> {
   constructor() {

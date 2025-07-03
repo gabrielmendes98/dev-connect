@@ -1,4 +1,4 @@
-import { DiscussionEntity } from '../../../domain/content/entities/DiscussionEntity';
+import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
 import { IDiscussionBaseModel } from '../mongoose/models/DiscussionModel';
 
 export class DiscussionMapper {

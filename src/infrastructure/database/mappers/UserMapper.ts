@@ -1,5 +1,5 @@
 import { User as PrismaUser } from '@prisma/client';
-import { UserEntity } from '../../../domain/identity/entities/UserEntity';
+import { UserEntity } from '@domain/identity/entities/UserEntity';
 
 export class UserMapper {
   public static toPersistence(entity: UserEntity): Omit<PrismaUser, 'createdAt' | 'updatedAt'> {

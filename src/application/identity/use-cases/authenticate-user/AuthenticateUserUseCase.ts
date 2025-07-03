@@ -1,5 +1,5 @@
-import { TokenService } from '../../../../domain/identity/services/TokenService';
-import { UseCase } from '../../../shared/UseCase';
+import { TokenService } from '@domain/identity/services/TokenService';
+import { UseCase } from '@application/shared/UseCase';
 import { AuthenticateUserInput, AuthenticateUserOutput } from './AuthenticateUserDTO';
 
 export class AuthenticateUserUseCase

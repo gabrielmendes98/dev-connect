@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { UnauthorizedError } from '../../../domain/shared/errors/HttpErrors';
-import { JwtTokenService } from '../../../infrastructure/service-adapters/JwtTokenService';
+import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
+import { JwtTokenService } from '@infrastructure/service-adapters/JwtTokenService';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {

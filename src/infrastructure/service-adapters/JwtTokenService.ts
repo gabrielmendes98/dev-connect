@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { TokenPayload, TokenService } from '@domain/identity/services/TokenService';
+import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 import type { StringValue } from 'ms';
-import { TokenPayload, TokenService } from '../../domain/identity/services/TokenService';
-import { InternalServerError } from '../../domain/shared/errors/HttpErrors';
 
 export class JwtTokenService implements TokenService {
   private readonly secret = process.env.JWT_SECRET;
@@ -22,6 +22,7 @@ export class JwtTokenService implements TokenService {
       const decoded = jwt.verify(token, this.secret) as TokenPayload;
       return decoded;
     } catch (error) {
+      console.log('JwtTokenService: verify error:', error);
       return null;
     }
   }

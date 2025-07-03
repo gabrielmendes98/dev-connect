@@ -1,5 +1,5 @@
-import { TagEntity } from '../../../domain/content/entities/TagEntity';
-import { TagRepository } from '../../../domain/content/repositories/TagRepository';
+import { TagEntity } from '@domain/content/entities/TagEntity';
+import { TagRepository } from '@domain/content/repositories/TagRepository';
 import { TagMapper } from '../mappers/TagMapper';
 import { TagModel } from '../mongoose/models/TagModel';
 

@@ -1,6 +1,6 @@
-import { DomainEvent } from '../../shared/events/DomainEvent';
-import { EmailVO } from '../../shared/value-objects/EmailVO';
-import { IdVO } from '../../shared/value-objects/IdVO';
+import { DomainEvent } from '@domain/shared/events/DomainEvent';
+import { EmailVO } from '@domain/shared/value-objects/EmailVO';
+import { IdVO } from '@domain/shared/value-objects/IdVO';
 
 export class UserRegisteredEvent implements DomainEvent {
   public dateTimeOccurred: Date;

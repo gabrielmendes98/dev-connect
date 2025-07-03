@@ -1,9 +1,9 @@
-import { ProfileEntity } from '../../../domain/identity/entities/ProfileEntity';
-import { UserEntity } from '../../../domain/identity/entities/UserEntity';
-import { UserRepository } from '../../../domain/identity/repositories/UserRepository';
+import { PrismaClient } from '@prisma/client';
+import { ProfileEntity } from '@domain/identity/entities/ProfileEntity';
+import { UserEntity } from '@domain/identity/entities/UserEntity';
+import { UserRepository } from '@domain/identity/repositories/UserRepository';
 import { ProfileMapper } from '../mappers/ProfileMapper';
 import { UserMapper } from '../mappers/UserMapper';
-import { PrismaClient } from '@prisma/client';
 
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly client: PrismaClient) {}
