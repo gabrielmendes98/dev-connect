@@ -1,4 +1,4 @@
-import { ValueObjectError } from '../errors/ValueObjectError';
+import { ErrorNotification } from '../error-notification/ErrorNotification';
 
 export class EmailVO {
   private constructor(private readonly value: string) {}
@@ -9,17 +9,20 @@ export class EmailVO {
   };
 
   public static create(email: string): EmailVO {
+    const errorNotification = new ErrorNotification('Email');
     if (!email) {
-      throw new ValueObjectError('Email cannot be empty.');
+      errorNotification.addError('Email cannot be empty.');
     }
 
     const isValid = EmailVO.validationRules.EMAIL_REGEX.test(email);
 
     if (!isValid) {
-      throw new ValueObjectError('Email format is invalid.');
+      errorNotification.addError('Email format is invalid.');
     }
 
     // More fake validations
+
+    errorNotification.check();
 
     return new EmailVO(email);
   }

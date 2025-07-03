@@ -1,4 +1,5 @@
 import { Entity } from '@domain/shared/core/Entity';
+import { ErrorNotification } from '@domain/shared/error-notification/ErrorNotification';
 import { EntityError } from '@domain/shared/errors/EntityError';
 import { IdVO } from '@domain/shared/value-objects/IdVO';
 
@@ -66,37 +67,46 @@ export class ProfileEntity extends Entity {
   }
 
   private validateNewName(name: string) {
+    const errorNotification = new ErrorNotification('Profile');
     if (!name) {
-      throw new EntityError('User name should not be empty');
+      errorNotification.addError('User name should not be empty');
     }
 
     if (name.length < 3 || name.length > 100) {
-      throw new EntityError('User name should have between 3 and 100 characters');
+      errorNotification.addError('User name should have between 3 and 100 characters');
     }
+
+    errorNotification.check();
   }
 
   private validateNewUsername(username: string) {
+    const errorNotification = new ErrorNotification('Profile');
     if (!username) {
-      throw new EntityError('User username should not be empty');
+      errorNotification.addError('User username should not be empty');
     }
 
     if (username.length < 3 || username.length > 20) {
-      throw new EntityError('User username should have between 3 and 20 characters');
+      errorNotification.addError('User username should have between 3 and 20 characters');
     }
 
     if (username.includes(' ')) {
-      throw new EntityError('User username should not contain spaces');
+      errorNotification.addError('User username should not contain spaces');
     }
+
+    errorNotification.check();
   }
 
   private validateNewBio(bio: string) {
+    const errorNotification = new ErrorNotification('Profile');
     if (!bio) {
-      throw new EntityError('User bio should not be empty');
+      errorNotification.addError('User bio should not be empty');
     }
 
     if (bio.length < 3 || bio.length > 300) {
-      throw new EntityError('User bio should have between 3 and 300 characters');
+      errorNotification.addError('User bio should have between 3 and 300 characters');
     }
+
+    errorNotification.check();
   }
 
   public updateName(newName: string) {

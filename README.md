@@ -24,7 +24,6 @@ In the future, maybe I will include some more things, like:
 
 ## TODO
 
-- Add notification pattern for errors to avoid throwing errors one by one
 - Improve Dependency Injection and remove it from app.ts
 - Add more tests
 - Improve error handling on usecases

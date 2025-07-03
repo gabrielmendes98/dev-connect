@@ -1,3 +1,4 @@
+import { ErrorNotification } from '@domain/shared/error-notification/ErrorNotification';
 import { AggregateRoot } from '../../shared/core/AggregateRoot';
 import { EntityError } from '../../shared/errors/EntityError';
 import { IdVO } from '../../shared/value-objects/IdVO';
@@ -16,14 +17,17 @@ export class DiscussionEntity extends AggregateRoot {
     super(id);
 
     // Add more validations
+    const errorNotification = new ErrorNotification('Discussion');
 
     if (!title) {
-      throw new EntityError('Discussion title must not be null');
+      errorNotification.addError('Discussion title must not be null');
     }
 
     if (!description) {
-      throw new EntityError('Discussion description must not be null');
+      errorNotification.addError('Discussion description must not be null');
     }
+
+    errorNotification.check();
   }
 
   public static createNewDiscussion(
