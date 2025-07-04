@@ -20,7 +20,7 @@ import { PrismaUserRepository } from './infrastructure/database/repositories/Pri
 import { BcryptPasswordHasher } from './infrastructure/service-adapters/BcryptPasswordHasher';
 import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenService';
 import { IdentityController } from './presentation/http/controllers/identity/IdentityController';
-import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
+import { buildAuthMiddleware } from './presentation/http/middlewares/AuthMiddleware';
 import { errorHandlerMiddleware } from './presentation/http/middlewares/ErrorMiddlewares';
 import { createPrivateRoutes } from './presentation/http/routes/PrivateRoutes';
 import { createPublicRoutes } from './presentation/http/routes/PublicRoutes';
@@ -83,7 +83,7 @@ async function startServer() {
   const privateRoutes = createPrivateRoutes(identityController);
 
   app.use('/api/v1', publicRoutes);
-  app.use('/api/v1', authMiddleware, privateRoutes);
+  app.use('/api/v1', buildAuthMiddleware({ tokenService }), privateRoutes);
 
   app.use(
     '/graphql',
