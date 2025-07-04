@@ -5,6 +5,7 @@ import { expressMiddleware } from '@as-integrations/express5';
 import cors from 'cors';
 import express from 'express';
 import passport from 'passport';
+import { createGraphQLContext } from '@presentation/graphql/context';
 import { WelcomeEmailListener } from './application/event-listeners/WelcomeEmailListener';
 import { AuthenticateUserUseCase } from './application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
 import { RegisterUserUseCase } from './application/identity/use-cases/register-user/RegisterUserUseCase';
@@ -14,7 +15,6 @@ import { prisma } from './infrastructure/database/prisma/PrismaClientService';
 import { PrismaUserRepository } from './infrastructure/database/repositories/PrismaUserRepository';
 import { BcryptPasswordHasher } from './infrastructure/service-adapters/BcryptPasswordHasher';
 import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenService';
-import { graphqlAuthContext } from './presentation/graphql/context/AuthContext';
 import { discussionResolvers } from './presentation/graphql/resolvers/DiscussionResolvers';
 import { IdentityController } from './presentation/http/controllers/identity/IdentityController';
 import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
@@ -78,11 +78,10 @@ async function startServer() {
   app.use('/api/v1', publicRoutes);
   app.use('/api/v1', authMiddleware, privateRoutes);
 
-  // TODO: Add middleware to resolvers
   app.use(
     '/graphql',
     expressMiddleware(apolloServer, {
-      context: graphqlAuthContext,
+      context: createGraphQLContext(tokenService),
     }),
   );
 

@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql';
 import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
 import { MongoDiscussionRepository } from '@infrastructure/database/repositories/MongoDiscussionRepository';
 import { MongoTagRepository } from '@infrastructure/database/repositories/MongoTagRepository';
-import { GraphQLAuthContext } from '../context/AuthContext';
+import { GraphQLContext } from '../context';
 
 export const discussionResolvers = {
   Query: {
@@ -18,7 +18,7 @@ export const discussionResolvers = {
     },
   },
   Mutation: {
-    startDiscussion: async (_: any, { input }: { input: any }, context: GraphQLAuthContext) => {
+    startDiscussion: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
       const userId = context.auth?.userId;
 
       if (!userId) {

@@ -1,19 +1,16 @@
 import { Request } from 'express';
-import { TokenPayload } from '@domain/identity/services/TokenService';
-import { JwtTokenService } from '@infrastructure/service-adapters/JwtTokenService';
+import { TokenPayload, TokenService } from '@domain/identity/services/TokenService';
 
-export interface GraphQLAuthContext {
+export interface AuthContext {
   auth: TokenPayload | null;
 }
 
-export const graphqlAuthContext = async ({
-  req,
-}: {
+export interface BuildAuthContextArgs {
   req: Request;
-}): Promise<GraphQLAuthContext> => {
-  // TODO: Inject TokenService
-  const tokenService = new JwtTokenService();
+  tokenService: TokenService;
+}
 
+export const buildAuthContext = ({ req, tokenService }: BuildAuthContextArgs): AuthContext => {
   try {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
