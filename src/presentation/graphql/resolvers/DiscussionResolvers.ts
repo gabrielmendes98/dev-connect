@@ -1,12 +1,19 @@
 // TODO: Remove this and type resolvers
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLError } from 'graphql';
+import { TagRepository } from '@domain/content/repositories/TagRepository';
 import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
-import { MongoDiscussionRepository } from '@infrastructure/database/repositories/MongoDiscussionRepository';
-import { MongoTagRepository } from '@infrastructure/database/repositories/MongoTagRepository';
 import { GraphQLContext } from '../context';
 
-export const discussionResolvers = {
+export interface DiscussionResolversDependencies {
+  createDiscussionUseCase: CreateDiscussionUseCase;
+  tagRepository: TagRepository;
+}
+
+export const buildDiscussionResolvers = ({
+  createDiscussionUseCase,
+  tagRepository,
+}: DiscussionResolversDependencies) => ({
   Query: {
     discussions: async () => {
       // TODO: Implement here
@@ -31,8 +38,6 @@ export const discussionResolvers = {
       }
 
       try {
-        const discussionRepository = new MongoDiscussionRepository();
-        const createDiscussionUseCase = new CreateDiscussionUseCase(discussionRepository);
         const result = await createDiscussionUseCase.execute({
           createdByUserId: userId,
           description: input.description,
@@ -63,8 +68,6 @@ export const discussionResolvers = {
         return [];
       }
 
-      // TODO: Inject tag repository
-      const tagRepository = new MongoTagRepository();
       const tags = await tagRepository.findByIds(parent.tagIds);
       return tags.map((tag) => ({
         id: tag.getId().getValue(),
@@ -72,4 +75,4 @@ export const discussionResolvers = {
       }));
     },
   },
-};
+});

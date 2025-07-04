@@ -5,7 +5,11 @@ import { expressMiddleware } from '@as-integrations/express5';
 import cors from 'cors';
 import express from 'express';
 import passport from 'passport';
+import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
+import { MongoDiscussionRepository } from '@infrastructure/database/repositories/MongoDiscussionRepository';
+import { MongoTagRepository } from '@infrastructure/database/repositories/MongoTagRepository';
 import { createGraphQLContext } from '@presentation/graphql/context';
+import { buildResolvers } from '@presentation/graphql/resolvers';
 import { WelcomeEmailListener } from './application/event-listeners/WelcomeEmailListener';
 import { AuthenticateUserUseCase } from './application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
 import { RegisterUserUseCase } from './application/identity/use-cases/register-user/RegisterUserUseCase';
@@ -15,7 +19,6 @@ import { prisma } from './infrastructure/database/prisma/PrismaClientService';
 import { PrismaUserRepository } from './infrastructure/database/repositories/PrismaUserRepository';
 import { BcryptPasswordHasher } from './infrastructure/service-adapters/BcryptPasswordHasher';
 import { JwtTokenService } from './infrastructure/service-adapters/JwtTokenService';
-import { discussionResolvers } from './presentation/graphql/resolvers/DiscussionResolvers';
 import { IdentityController } from './presentation/http/controllers/identity/IdentityController';
 import { authMiddleware } from './presentation/http/middlewares/AuthMiddleware';
 import { errorHandlerMiddleware } from './presentation/http/middlewares/ErrorMiddlewares';
@@ -31,14 +34,6 @@ async function startServer() {
     path.join(__dirname, './presentation/graphql/schemas/DiscussionSchema.graphql'),
     'utf-8',
   );
-  const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers: discussionResolvers,
-  });
-
-  await apolloServer.start();
-
-  console.log('🚀 Started Apollo Server');
 
   app.use(cors());
   app.use(express.json());
@@ -58,6 +53,9 @@ async function startServer() {
   const registerUserUseCase = new RegisterUserUseCase(userRepository, passwordHasherService);
   const tokenService = new JwtTokenService();
   const authenticateUserUseCase = new AuthenticateUserUseCase(tokenService);
+  const discussionRepository = new MongoDiscussionRepository();
+  const createDiscussionUseCase = new CreateDiscussionUseCase(discussionRepository);
+  const tagRepository = new MongoTagRepository();
 
   // Controllers
   const identityController = new IdentityController(
@@ -70,6 +68,15 @@ async function startServer() {
   // Configs
   setupPassport();
   app.use(passport.initialize());
+
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers: buildResolvers({
+      createDiscussionUseCase,
+      tagRepository,
+    }),
+  });
+  await apolloServer.start();
 
   // Routes
   const publicRoutes = createPublicRoutes(identityController);
