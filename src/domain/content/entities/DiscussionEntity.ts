@@ -2,6 +2,7 @@ import { ErrorNotification } from '@domain/shared/error-notification/ErrorNotifi
 import { AggregateRoot } from '../../shared/core/AggregateRoot';
 import { EntityError } from '../../shared/errors/EntityError';
 import { IdVO } from '../../shared/value-objects/IdVO';
+import { DiscussionCommentAddedEvent } from '../events/DiscussionCommentAddedEvent';
 import { CommentEntity } from './CommentEntity';
 
 export class DiscussionEntity extends AggregateRoot {
@@ -60,7 +61,7 @@ export class DiscussionEntity extends AggregateRoot {
   public addComment(authorId: string, text: string) {
     const newComment = CommentEntity.addComment(authorId, text);
     this.comments.push(newComment);
-    // TODO: Add domain event to notify discussion owner
+    this.addDomainEvent(new DiscussionCommentAddedEvent(this.id, IdVO.fromString(authorId), text));
   }
 
   public getTitle(): string {

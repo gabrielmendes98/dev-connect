@@ -24,10 +24,8 @@ In the future, maybe I will include some more things, like:
 
 ## TODO
 
-- Improve Dependency Injection and remove it from app.ts
-- Refactor my bootstrap and DI system
-- Improve error handling on usecases
 - Resolve all TODOs
+- Improve graphql error handler
 - Implement GraphQL DataLoader for Discussion.tags resolver
 - Add Winstonlogger and remove console.log
 - Add more tests

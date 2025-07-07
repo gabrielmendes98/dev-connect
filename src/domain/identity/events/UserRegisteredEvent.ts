@@ -14,6 +14,6 @@ export class UserRegisteredEvent implements DomainEvent {
   }
 
   getAggregateId(): IdVO {
-    throw this.userId;
+    return this.userId;
   }
 }

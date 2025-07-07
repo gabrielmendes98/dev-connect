@@ -34,7 +34,6 @@ export class AuthWithGoogleService implements AuthService<AuthWithGoogleCredenti
 
     console.log(`AuthWithGoogleService: User ${email} not found. Creating new user...`);
 
-    // Se não existir, criamos um novo usuário e perfil.
     const newRandomPassword = PlainPasswordVO.generateRandomPassword();
     const newUser = await UserEntity.registerNewUser(
       email,

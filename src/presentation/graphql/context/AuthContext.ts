@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { TokenPayload, TokenService } from '@domain/identity/services/TokenService';
+import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
 
 export interface AuthContext {
   auth: TokenPayload | null;
@@ -11,18 +12,25 @@ export interface BuildAuthContextArgs {
 }
 
 export const buildAuthContext = ({ req, tokenService }: BuildAuthContextArgs): AuthContext => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
+  if (req.body.operationName === 'IntrospectionQuery') {
+    console.log('buildAuthContext: IntrospectionQuery auth bypass');
+    return { auth: null };
+  }
+
+  const authHeader = req.headers.authorization;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    try {
       const payload = tokenService.verify(token);
       if (payload) {
         return { auth: payload };
       }
+    } catch (error) {
+      console.error('buildAuthContext: Error in token validation:', error);
+      throw new UnauthorizedError('Invalid or expired token.');
     }
-  } catch (error) {
-    console.log('graphqlAuth: No valid token found in GraphQL request:', error);
   }
 
-  return { auth: null };
+  throw new UnauthorizedError('Token not provided or malformed.');
 };

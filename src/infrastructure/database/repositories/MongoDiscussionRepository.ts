@@ -1,17 +1,25 @@
 import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
 import { DiscussionRepository } from '@domain/content/repositories/DiscussionRepository';
+import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 import { DiscussionMapper } from '../mappers/DiscussionMapper';
 import { DiscussionModel } from '../mongoose/models/DiscussionModel';
 
 export class MongoDiscussionRepository implements DiscussionRepository {
   async save(discussion: DiscussionEntity): Promise<void> {
-    const persistenceDiscussion = DiscussionMapper.toPersistence(discussion);
-    const discussionId = discussion.getId().getValue();
+    try {
+      const persistenceDiscussion = DiscussionMapper.toPersistence(discussion);
+      const discussionId = discussion.getId().getValue();
 
-    console.log(`MongoDiscussionRepository: Saving discussion with ID: ${discussionId}`);
+      console.log(`MongoDiscussionRepository: Saving discussion with ID: ${discussionId}`);
 
-    await DiscussionModel.findByIdAndUpdate(discussionId, persistenceDiscussion, { upsert: true });
+      await DiscussionModel.findByIdAndUpdate(discussionId, persistenceDiscussion, {
+        upsert: true,
+      });
 
-    console.log(`MongoDiscussionRepository: Discussion ${discussionId} saved successfully.`);
+      console.log(`MongoDiscussionRepository: Discussion ${discussionId} saved successfully.`);
+    } catch (error) {
+      console.error('MongoDiscussionRepository: Error saving discussion', error);
+      throw new InternalServerError('Unexpected server error when saving discussion');
+    }
   }
 }

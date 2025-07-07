@@ -15,7 +15,7 @@ export class BcryptPasswordHasher implements PasswordHasherService {
       const hash = await bcrypt.hash(plainPassword, salt);
       return hash;
     } catch (error) {
-      console.error('Error during password hashing:', error); // TODO: Change for logger
+      console.error('Error during password hashing:', error);
       throw new InternalServerError('Failed to hash password.');
     }
   }
@@ -24,7 +24,7 @@ export class BcryptPasswordHasher implements PasswordHasherService {
     try {
       return await bcrypt.compare(plainPassword, hashedPassword);
     } catch (error) {
-      console.error('Error during password comparison:', error); // TODO: Change for logger
+      console.error('Error during password comparison:', error);
       return false;
     }
   }

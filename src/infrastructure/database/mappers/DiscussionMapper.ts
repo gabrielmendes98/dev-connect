@@ -19,7 +19,6 @@ export class DiscussionMapper {
     };
   }
 
-  // Converte do Mongoose de volta para a nossa entidade de domínio
   public static toDomain(raw: IDiscussionBaseModel): DiscussionEntity {
     return DiscussionEntity.fromPersistenceWithoutLoadingComments(
       raw._id,

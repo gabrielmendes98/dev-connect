@@ -7,6 +7,8 @@ import express from 'express';
 import passport from 'passport';
 import { connectToMongoDB } from '@infrastructure/database/mongoose/MongooseConnectionService';
 import container from '@presentation/config/DependencyContainer';
+import { formatError } from '@presentation/graphql/config/FormatError';
+import { httpStatusPlugin } from '@presentation/graphql/plugins/HttpStatusPlugin';
 import { errorHandlerMiddleware } from '@presentation/http/middlewares/ErrorMiddlewares';
 import { createPrivateRoutes } from '@presentation/http/routes/PrivateRoutes';
 import { createPublicRoutes } from '@presentation/http/routes/PublicRoutes';
@@ -38,7 +40,13 @@ async function startServer() {
     res.send('Hello from DevConnect!');
   });
 
-  const apolloServer = new ApolloServer({ typeDefs, resolvers });
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    formatError,
+    plugins: [httpStatusPlugin],
+    introspection: process.env.NODE_ENV !== 'production',
+  });
   await apolloServer.start();
 
   // REST Routes
