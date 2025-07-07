@@ -4,12 +4,12 @@ import { ProfileRepository } from '@domain/identity/repositories/ProfileReposito
 import { ProfileMapper } from '../mappers/ProfileMapper';
 
 export class PrismaProfileRepository implements ProfileRepository {
-  constructor(private readonly client: PrismaClient) {}
+  constructor(private readonly prismaClient: PrismaClient) {}
 
   async save(profile: ProfileEntity): Promise<void> {
     const profileModel = ProfileMapper.toPersistence(profile);
 
-    await this.client.profile.update({
+    await this.prismaClient.profile.update({
       where: {
         id: profileModel.id,
       },

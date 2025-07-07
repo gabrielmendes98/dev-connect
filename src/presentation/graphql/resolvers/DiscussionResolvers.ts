@@ -44,7 +44,6 @@ export const buildDiscussionResolvers = ({
           tagIds: input.tags,
           title: input.title,
         });
-        console.log('🚀 ~ startDiscussion: ~ result:', result);
         return {
           success: true,
           message: 'Discussion created!',

@@ -6,13 +6,13 @@ import { ProfileMapper } from '../mappers/ProfileMapper';
 import { UserMapper } from '../mappers/UserMapper';
 
 export class PrismaUserRepository implements UserRepository {
-  constructor(private readonly client: PrismaClient) {}
+  constructor(private readonly prismaClient: PrismaClient) {}
 
   async createWithProfile(user: UserEntity, profile: ProfileEntity): Promise<void> {
     try {
       const userModel = UserMapper.toPersistence(user);
 
-      await this.client.$transaction(async (tx) => {
+      await this.prismaClient.$transaction(async (tx) => {
         await tx.user.create({
           data: userModel,
         });
@@ -20,7 +20,7 @@ export class PrismaUserRepository implements UserRepository {
 
       const profileModel = ProfileMapper.toPersistence(profile);
 
-      await this.client.$transaction(async (tx) => {
+      await this.prismaClient.$transaction(async (tx) => {
         await tx.profile.create({
           data: profileModel,
         });
@@ -29,14 +29,14 @@ export class PrismaUserRepository implements UserRepository {
       console.log('Error creating user and profile in transaction:', error);
       throw error;
     } finally {
-      await this.client.$disconnect();
+      await this.prismaClient.$disconnect();
     }
   }
 
   async save(user: UserEntity): Promise<void> {
     const userModel = UserMapper.toPersistence(user);
 
-    await this.client.user.update({
+    await this.prismaClient.user.update({
       where: {
         id: userModel.id,
       },
@@ -47,7 +47,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
-    const user = await this.client.user.findUnique({
+    const user = await this.prismaClient.user.findUnique({
       where: {
         email,
       },
@@ -61,7 +61,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async findById(id: string): Promise<UserEntity | null> {
-    const user = await this.client.user.findUnique({
+    const user = await this.prismaClient.user.findUnique({
       where: {
         id,
       },

@@ -5,7 +5,7 @@ import { buildDataLoaderContext, DataLoaderContext } from './DataLoaderContext';
 
 export type GraphQLContext = AuthContext & DataLoaderContext;
 
-export const createGraphQLContext = (tokenService: TokenService) => {
+export const createGraphQLContext = ({ tokenService }: { tokenService: TokenService }) => {
   return async ({ req }: { req: Request }): Promise<GraphQLContext> => {
     const authContext = buildAuthContext({ req, tokenService });
     const dataLoaderContext = buildDataLoaderContext();

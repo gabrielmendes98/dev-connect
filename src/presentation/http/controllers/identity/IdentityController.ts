@@ -19,7 +19,7 @@ export class IdentityController {
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly authenticateUserUseCase: AuthenticateUserUseCase,
     private readonly userRepository: UserRepository,
-    private readonly passwordService: PasswordHasherService,
+    private readonly passwordHasherService: PasswordHasherService,
   ) {}
 
   public async registerUser(
@@ -50,7 +50,7 @@ export class IdentityController {
       const { email, password } = req.body;
       const authWithEmailAndPasswordService = new AuthWithEmailAndPasswordService(
         this.userRepository,
-        this.passwordService,
+        this.passwordHasherService,
       );
       const result = await this.authenticateUserUseCase.execute({
         authService: authWithEmailAndPasswordService,
@@ -73,7 +73,7 @@ export class IdentityController {
 
       const authWithGoogleService = new AuthWithGoogleService(
         this.userRepository,
-        this.passwordService,
+        this.passwordHasherService,
       );
 
       const { token } = await this.authenticateUserUseCase.execute({

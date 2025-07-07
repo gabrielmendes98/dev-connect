@@ -9,23 +9,28 @@ export class CreateDiscussionUseCase
   constructor(private discussionRepository: DiscussionRepository) {}
 
   async execute(input: CreateDiscussionInput): CreateDiscussionOutput {
-    const newDiscussion = DiscussionEntity.createNewDiscussion(
-      input.title,
-      input.description,
-      input.imageUrl || null,
-      input.tagIds,
-      input.createdByUserId,
-    );
+    try {
+      const newDiscussion = DiscussionEntity.createNewDiscussion(
+        input.title,
+        input.description,
+        input.imageUrl || null,
+        input.tagIds,
+        input.createdByUserId,
+      );
 
-    await this.discussionRepository.save(newDiscussion);
+      await this.discussionRepository.save(newDiscussion);
 
-    return {
-      id: newDiscussion.getId().getValue(),
-      comments: [],
-      createdByUserId: newDiscussion.getCreatedByUserId().getValue(),
-      description: newDiscussion.getDescription(),
-      title: newDiscussion.getTitle(),
-      tagIds: newDiscussion.getTagIds().map((tag) => tag.getValue()),
-    };
+      return {
+        id: newDiscussion.getId().getValue(),
+        comments: [],
+        createdByUserId: newDiscussion.getCreatedByUserId().getValue(),
+        description: newDiscussion.getDescription(),
+        title: newDiscussion.getTitle(),
+        tagIds: newDiscussion.getTagIds().map((tag) => tag.getValue()),
+      };
+    } catch (error) {
+      console.error('CreateDiscussionUseCase error creating new discussion', error);
+      throw error;
+    }
   }
 }
