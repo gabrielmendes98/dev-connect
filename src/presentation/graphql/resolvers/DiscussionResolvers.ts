@@ -1,10 +1,8 @@
-// TODO: Remove this and type resolvers
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CursorPaginationInputDTO } from '@domain/shared/dtos/PaginationDTO';
+import { TagEntity } from '@domain/content/entities/TagEntity';
 import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
 import { ListDiscussionFeedUseCase } from '@application/content/use-cases/list-discussion-feed/ListDiscussionFeedUseCase';
-import { GraphQLContext } from '../context';
+import { Resolvers } from '../generated/types';
 
 export interface DiscussionResolversDependencies {
   createDiscussionUseCase: CreateDiscussionUseCase;
@@ -14,22 +12,13 @@ export interface DiscussionResolversDependencies {
 export const buildDiscussionResolvers = ({
   createDiscussionUseCase,
   listDiscussionFeedUseCase,
-}: DiscussionResolversDependencies) => ({
+}: DiscussionResolversDependencies): Resolvers => ({
   Query: {
-    discussions: async (_: any, { input }: { input: CursorPaginationInputDTO }) => {
+    discussions: async (_, { input }) => {
       const paginatedDiscussions = await listDiscussionFeedUseCase.execute(input);
-      const discussions = paginatedDiscussions.items.map((discussion) => ({
-        id: discussion.id,
-        title: discussion.title,
-        description: discussion.description,
-        createdByUserId: discussion.createdByUserId,
-        comments: discussion.comments,
-        tagIds: discussion.tagIds,
-        createdAt: discussion.createdAt,
-      }));
 
       return {
-        items: discussions,
+        items: paginatedDiscussions.items,
         nextCursor: paginatedDiscussions.nextCursor,
       };
     },
@@ -38,14 +27,14 @@ export const buildDiscussionResolvers = ({
     },
   },
   Mutation: {
-    startDiscussion: async (_: any, { input }: { input: any }, context: GraphQLContext) => {
+    startDiscussion: async (_, { input }, context) => {
       const userId = context.auth!.userId;
 
       try {
         const result = await createDiscussionUseCase.execute({
           createdByUserId: userId,
           description: input.description,
-          tagIds: input.tags,
+          tagIds: input.tags || [],
           title: input.title,
         });
         return {
@@ -60,12 +49,30 @@ export const buildDiscussionResolvers = ({
     },
   },
   Discussion: {
-    tags: async (parent: { tagIds: string[] }, _: any, context: GraphQLContext) => {
-      if (!parent.tagIds || parent.tagIds.length === 0) {
+    id: (parent) => {
+      return parent.getId().getValue();
+    },
+    createdByUserId: (parent) => {
+      return parent.getCreatedByUserId().getValue();
+    },
+    createdAt: (parent) => {
+      return parent.getCreatedAt().toISOString();
+    },
+    tags: async (parent, _, context) => {
+      const tagIds = parent.getTagIds();
+
+      if (!tagIds || tagIds.length === 0) {
         return [];
       }
 
-      return context.loaders.tagLoader.loadMany(parent.tagIds);
+      const data = await context.loaders.tagLoader.loadMany(tagIds.map((id) => id.getValue()));
+
+      return data
+        .filter((tag): tag is TagEntity => !(tag instanceof Error))
+        .map((tag) => ({
+          id: tag.getId().getValue(),
+          name: tag.getName(),
+        }));
     },
   },
 });

@@ -19,13 +19,6 @@ export class CreateDiscussionUseCase
 
     await this.discussionRepository.save(newDiscussion);
 
-    return {
-      id: newDiscussion.getId().getValue(),
-      comments: [],
-      createdByUserId: newDiscussion.getCreatedByUserId().getValue(),
-      description: newDiscussion.getDescription(),
-      title: newDiscussion.getTitle(),
-      tagIds: newDiscussion.getTagIds().map((tag) => tag.getValue()),
-    };
+    return newDiscussion;
   }
 }

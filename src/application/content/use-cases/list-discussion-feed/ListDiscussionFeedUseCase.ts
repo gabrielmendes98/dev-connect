@@ -11,24 +11,8 @@ export class ListDiscussionFeedUseCase
     // We can improve here and create a personalized feed for each user
     const paginatedDiscussions = await this.discussionRepository.findAll(input);
 
-    const formattedDiscussions = paginatedDiscussions.items.map((discussion) => ({
-      id: discussion.getId().getValue(),
-      title: discussion.getTitle(),
-      description: discussion.getDescription(),
-      imageUrl: discussion.getImageUrl(),
-      comments: discussion.getComments().map((comment) => ({
-        id: comment.getId().getValue(),
-        authorId: comment.getAuthorId().getValue(),
-        text: comment.getText(),
-        createdAt: comment.getCreatedAt(),
-      })),
-      tagIds: discussion.getTagIds().map((tag) => tag.getValue()),
-      createdByUserId: discussion.getCreatedByUserId().getValue(),
-      createdAt: discussion.getCreatedAt(),
-    }));
-
     return {
-      items: formattedDiscussions,
+      items: paginatedDiscussions.items,
       nextCursor: paginatedDiscussions.nextCursor,
     };
   }

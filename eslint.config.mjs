@@ -7,6 +7,7 @@ import importPlugin from 'eslint-plugin-import';
 export default [
   {
     files: ['src/**/*.ts'],
+    ignores: ['src/presentation/graphql/generated/**/*', 'dist/**/*'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {

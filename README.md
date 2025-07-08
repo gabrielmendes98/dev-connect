@@ -26,8 +26,6 @@ In the future, maybe I will include some more things, like:
 ## TODO
 
 - Resolve all TODOs
-- Improve graphql error handler
-- Implement GraphQL DataLoader for Discussion.tags resolver
 - Add Winstonlogger and remove console.log
 - Add more tests
 - Refactor architecture drawing to add new presentation layer and reflect domain changes

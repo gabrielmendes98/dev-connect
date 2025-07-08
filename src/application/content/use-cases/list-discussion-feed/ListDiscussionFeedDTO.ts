@@ -1,3 +1,4 @@
+import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
 import {
   CursorPaginationInputDTO,
   CursorPaginationOutputDTO,
@@ -5,20 +6,4 @@ import {
 
 export type ListDiscussionFeedInput = CursorPaginationInputDTO;
 
-export type ListDiscussionFeedOutput = Promise<
-  CursorPaginationOutputDTO<{
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string | null;
-    comments: {
-      id: string;
-      authorId: string;
-      text: string;
-      createdAt: Date;
-    }[];
-    tagIds: string[];
-    createdByUserId: string;
-    createdAt: Date;
-  }>
->;
+export type ListDiscussionFeedOutput = Promise<CursorPaginationOutputDTO<DiscussionEntity>>;

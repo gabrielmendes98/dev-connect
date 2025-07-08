@@ -1,3 +1,5 @@
+import { DiscussionEntity } from '@domain/content/entities/DiscussionEntity';
+
 export interface CreateDiscussionInput {
   title: string;
   description: string;
@@ -6,11 +8,4 @@ export interface CreateDiscussionInput {
   tagIds: string[];
 }
 
-export type CreateDiscussionOutput = Promise<{
-  id: string;
-  title: string;
-  description: string;
-  createdByUserId: string;
-  tagIds: string[];
-  comments: string[];
-}>;
+export type CreateDiscussionOutput = Promise<DiscussionEntity>;

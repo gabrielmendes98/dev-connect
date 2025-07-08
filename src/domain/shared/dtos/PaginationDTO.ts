@@ -13,10 +13,10 @@ export interface OffsetPaginationOutputDTO<T> {
 
 export interface CursorPaginationInputDTO {
   limit: number;
-  after?: string;
+  after?: string | null;
 }
 
 export interface CursorPaginationOutputDTO<T> {
   items: T[];
-  nextCursor?: string;
+  nextCursor?: string | null;
 }
