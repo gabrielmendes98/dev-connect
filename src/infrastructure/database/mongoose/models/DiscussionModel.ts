@@ -13,6 +13,7 @@ export interface IDiscussionBaseModel {
     text: string;
     createdAt: Date;
   }[];
+  createdAt: Date;
 }
 
 export type IDiscussionModel = Document & IDiscussionBaseModel;

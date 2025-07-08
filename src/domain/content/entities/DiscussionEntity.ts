@@ -1,6 +1,5 @@
 import { ErrorNotification } from '@domain/shared/error-notification/ErrorNotification';
 import { AggregateRoot } from '../../shared/core/AggregateRoot';
-import { EntityError } from '../../shared/errors/EntityError';
 import { IdVO } from '../../shared/value-objects/IdVO';
 import { DiscussionCommentAddedEvent } from '../events/DiscussionCommentAddedEvent';
 import { CommentEntity } from './CommentEntity';
@@ -14,6 +13,7 @@ export class DiscussionEntity extends AggregateRoot {
     private comments: CommentEntity[],
     private tagIds: IdVO[],
     private readonly createdByUserId: IdVO,
+    private readonly createdAt: Date,
   ) {
     super(id);
 
@@ -41,7 +41,7 @@ export class DiscussionEntity extends AggregateRoot {
     const id = IdVO.create();
     const userId = IdVO.fromString(createdByUserId);
     const tagIds = tagIdStrings.map((id) => IdVO.fromString(id));
-    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId);
+    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId, new Date());
   }
 
   public static fromPersistenceWithoutLoadingComments(
@@ -51,11 +51,12 @@ export class DiscussionEntity extends AggregateRoot {
     imageUrl: string | null,
     tagIdStrings: string[],
     createdByUserId: string,
+    createdAt: Date,
   ) {
     const id = IdVO.fromString(idString);
     const userId = IdVO.fromString(createdByUserId);
     const tagIds = tagIdStrings.map((id) => IdVO.fromString(id));
-    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId);
+    return new DiscussionEntity(id, title, description, imageUrl, [], tagIds, userId, createdAt);
   }
 
   public addComment(authorId: string, text: string) {
@@ -86,5 +87,9 @@ export class DiscussionEntity extends AggregateRoot {
 
   public getCreatedByUserId(): IdVO {
     return this.createdByUserId;
+  }
+
+  public getCreatedAt(): Date {
+    return this.createdAt;
   }
 }

@@ -1,26 +1,39 @@
 // TODO: Remove this and type resolvers
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TagRepository } from '@domain/content/repositories/TagRepository';
+import { CursorPaginationInputDTO } from '@domain/shared/dtos/PaginationDTO';
 import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
+import { ListDiscussionFeedUseCase } from '@application/content/use-cases/list-discussion-feed/ListDiscussionFeedUseCase';
 import { GraphQLContext } from '../context';
 
 export interface DiscussionResolversDependencies {
   createDiscussionUseCase: CreateDiscussionUseCase;
-  tagRepository: TagRepository;
+  listDiscussionFeedUseCase: ListDiscussionFeedUseCase;
 }
 
 export const buildDiscussionResolvers = ({
   createDiscussionUseCase,
-  tagRepository,
+  listDiscussionFeedUseCase,
 }: DiscussionResolversDependencies) => ({
   Query: {
-    discussions: async () => {
-      // TODO: Implement here
-      return [];
+    discussions: async (_: any, { input }: { input: CursorPaginationInputDTO }) => {
+      const paginatedDiscussions = await listDiscussionFeedUseCase.execute(input);
+      const discussions = paginatedDiscussions.items.map((discussion) => ({
+        id: discussion.id,
+        title: discussion.title,
+        description: discussion.description,
+        createdByUserId: discussion.createdByUserId,
+        comments: discussion.comments,
+        tagIds: discussion.tagIds,
+        createdAt: discussion.createdAt,
+      }));
+
+      return {
+        items: discussions,
+        nextCursor: paginatedDiscussions.nextCursor,
+      };
     },
     discussion: async () => {
-      // TODO: Implement here
       return null;
     },
   },
@@ -47,16 +60,12 @@ export const buildDiscussionResolvers = ({
     },
   },
   Discussion: {
-    tags: async (parent: { tagIds: string[] }) => {
+    tags: async (parent: { tagIds: string[] }, _: any, context: GraphQLContext) => {
       if (!parent.tagIds || parent.tagIds.length === 0) {
         return [];
       }
 
-      const tags = await tagRepository.findByIds(parent.tagIds);
-      return tags.map((tag) => ({
-        id: tag.getId().getValue(),
-        name: tag.getName(),
-      }));
+      return context.loaders.tagLoader.loadMany(parent.tagIds);
     },
   },
 });

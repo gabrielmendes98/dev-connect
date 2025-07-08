@@ -3,7 +3,6 @@ import { BaseError } from '@domain/shared/errors/BaseError';
 import { ApiResponse } from '../responses/ApiResponse';
 
 export const errorHandlerMiddleware: ErrorRequestHandler = (err, req, res, _next) => {
-  // TODO: Change for Winston logger
   console.error(`[Error] ${err.stack}`);
 
   if (err instanceof BaseError) {

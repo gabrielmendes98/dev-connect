@@ -5,11 +5,11 @@ export type BuildResolversDependencies = DiscussionResolversDependencies;
 
 export const buildResolvers = ({
   createDiscussionUseCase,
-  tagRepository,
+  listDiscussionFeedUseCase,
 }: BuildResolversDependencies) => {
   const discussionResolvers = buildDiscussionResolvers({
     createDiscussionUseCase,
-    tagRepository,
+    listDiscussionFeedUseCase,
   });
 
   // We can add other resolvers here

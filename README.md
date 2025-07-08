@@ -15,6 +15,7 @@ This project was created to practice some concepts and skills, like:
 - Testing
 - Data validation
   - Added an adapted version of Notification pattern
+- Cursor-based pagination
 
 In the future, maybe I will include some more things, like:
 

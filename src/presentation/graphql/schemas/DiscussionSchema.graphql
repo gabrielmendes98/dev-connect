@@ -1,3 +1,14 @@
+# TODO: Create common schema for pagination
+input PaginatedDiscussionsInput {
+  limit: Int!
+  after: String
+}
+
+type PaginatedDiscussions {
+  items: [Discussion!]!
+  nextCursor: String
+}
+
 type Tag {
   id: ID!
   name: String!
@@ -17,7 +28,7 @@ type Discussion {
   createdByUserId: ID!
   tags: [Tag!]!
   comments: [Comment!]!
-  # createdAt: String!
+  createdAt: ID!
   # updatedAt: String!
 }
 
@@ -34,7 +45,7 @@ input StartDiscussionInput {
 }
 
 type Query {
-  discussions: [Discussion!]!
+  discussions(input: PaginatedDiscussionsInput!): PaginatedDiscussions!
   discussion(id: ID!): Discussion
 }
 

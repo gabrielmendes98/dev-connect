@@ -16,6 +16,7 @@ export class DiscussionMapper {
         text: comment.getText(),
         createdAt: comment.getCreatedAt(),
       })),
+      createdAt: entity.getCreatedAt(),
     };
   }
 
@@ -27,6 +28,7 @@ export class DiscussionMapper {
       raw.imageUrl,
       raw.tags,
       raw.createdByUserId,
+      raw.createdAt,
     );
   }
 }
