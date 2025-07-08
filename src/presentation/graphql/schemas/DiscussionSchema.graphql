@@ -15,7 +15,6 @@ type Tag {
 }
 
 type Comment {
-  # TODO: Return complete author object so frontend can create interface with name, avatar, etc.
   authorId: ID!
   text: String!
   createdAt: String! # ISO Format
