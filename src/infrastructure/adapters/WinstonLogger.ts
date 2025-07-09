@@ -12,15 +12,22 @@ export class WinstonLogger implements Logger {
     const colors = { error: 'red', warn: 'yellow', info: 'green', debug: 'white' };
     winston.addColors(colors);
 
-    const format = winston.format.combine(
+    const devFormat = winston.format.combine(
       winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-      environment === 'development'
-        ? winston.format.colorize({ all: true })
-        : winston.format.uncolorize(),
-      winston.format.align(),
-      winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
-      winston.format.errors({ stack: true }),
+      winston.format.colorize({ all: true }),
+      winston.format.printf((info) => {
+        const { timestamp, level, message, ...meta } = info;
+        const metaString = Object.keys(meta).length ? JSON.stringify(meta, null, 2) : '';
+        return `${timestamp} ${level}: ${message} ${metaString}`;
+      }),
     );
+
+    const prodFormat = winston.format.combine(
+      winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
+      winston.format.json(),
+    );
+
+    const format = environment === 'development' ? devFormat : prodFormat;
 
     const transports = [
       new winston.transports.Console(),

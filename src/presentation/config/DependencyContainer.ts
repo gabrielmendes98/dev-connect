@@ -16,6 +16,7 @@ import { createGraphQLContext } from '@presentation/graphql/context';
 import { buildResolvers } from '@presentation/graphql/resolvers';
 import { IdentityController } from '@presentation/http/controllers/identity/IdentityController';
 import { buildAuthMiddleware } from '@presentation/http/middlewares/AuthMiddleware';
+import { buildErrorHandlerMiddleware } from '@presentation/http/middlewares/ErrorMiddlewares';
 
 const container = createContainer({
   strict: true,
@@ -47,6 +48,7 @@ container.register({
   resolvers: asFunction(buildResolvers).singleton().proxy(),
   graphqlContext: asFunction(createGraphQLContext).singleton().proxy(),
   authMiddleware: asFunction(buildAuthMiddleware).singleton().proxy(),
+  errorHandlerMiddleware: asFunction(buildErrorHandlerMiddleware).singleton().proxy(),
 
   // --- Other setups ---
   passportSetup: asFunction(setupPassport).singleton().proxy(),

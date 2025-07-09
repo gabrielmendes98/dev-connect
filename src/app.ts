@@ -9,7 +9,6 @@ import { connectToMongoDB } from '@infrastructure/database/mongoose/MongooseConn
 import container from '@presentation/config/DependencyContainer';
 import { formatError } from '@presentation/graphql/config/FormatError';
 import { httpStatusPlugin } from '@presentation/graphql/plugins/HttpStatusPlugin';
-import { errorHandlerMiddleware } from '@presentation/http/middlewares/ErrorMiddlewares';
 import { createPrivateRoutes } from '@presentation/http/routes/PrivateRoutes';
 import { createPublicRoutes } from '@presentation/http/routes/PublicRoutes';
 
@@ -23,6 +22,7 @@ async function startServer() {
   const resolvers = container.resolve('resolvers');
   const graphqlContext = container.resolve('graphqlContext');
   const authMiddleware = container.resolve('authMiddleware');
+  const errorHandlerMiddleware = container.resolve('errorHandlerMiddleware');
   const logger = container.resolve('logger');
 
   process.on('uncaughtException', (error) => {
