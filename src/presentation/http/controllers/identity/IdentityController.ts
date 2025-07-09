@@ -8,6 +8,7 @@ import {
 } from '@application/identity/services/auth-service/AuthWithGoogleService';
 import { AuthenticateUserUseCase } from '@application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
 import { RegisterUserUseCase } from '@application/identity/use-cases/register-user/RegisterUserUseCase';
+import { Logger } from '@application/shared/ports/Logger';
 import { ApiResponse } from '@presentation/http/responses/ApiResponse';
 import {
   EmailPasswordLoginRequestSchema,
@@ -20,6 +21,7 @@ export class IdentityController {
     private readonly authenticateUserUseCase: AuthenticateUserUseCase,
     private readonly userRepository: UserRepository,
     private readonly passwordHasherService: PasswordHasherService,
+    private readonly logger: Logger,
   ) {}
 
   public async registerUser(
@@ -74,6 +76,7 @@ export class IdentityController {
       const authWithGoogleService = new AuthWithGoogleService(
         this.userRepository,
         this.passwordHasherService,
+        this.logger,
       );
 
       const { token } = await this.authenticateUserUseCase.execute({

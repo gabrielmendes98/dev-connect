@@ -5,6 +5,7 @@ import { PasswordHasherService } from '@domain/identity/services/PasswordHasherS
 import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
 import { DomainHub } from '@domain/shared/events/DomainHub';
 import { PlainPasswordVO } from '@domain/shared/value-objects/PlainPasswordVO';
+import { Logger } from '@application/shared/ports/Logger';
 import { AuthService } from './AuthService';
 
 export interface AuthWithGoogleCredentials {
@@ -17,6 +18,7 @@ export class AuthWithGoogleService implements AuthService<AuthWithGoogleCredenti
   constructor(
     private readonly userRepository: UserRepository,
     private readonly passwordHasherService: PasswordHasherService,
+    private readonly logger: Logger,
   ) {}
 
   public async authenticate(credentials: AuthWithGoogleCredentials): Promise<UserEntity> {
@@ -32,7 +34,7 @@ export class AuthWithGoogleService implements AuthService<AuthWithGoogleCredenti
       return existingUser;
     }
 
-    console.log(`AuthWithGoogleService: User ${email} not found. Creating new user...`);
+    this.logger.info(`AuthWithGoogleService: User ${email} not found. Creating new user...`);
 
     const newRandomPassword = PlainPasswordVO.generateRandomPassword();
     const newUser = await UserEntity.registerNewUser(

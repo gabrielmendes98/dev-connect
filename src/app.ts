@@ -23,6 +23,18 @@ async function startServer() {
   const resolvers = container.resolve('resolvers');
   const graphqlContext = container.resolve('graphqlContext');
   const authMiddleware = container.resolve('authMiddleware');
+  const logger = container.resolve('logger');
+
+  process.on('uncaughtException', (error) => {
+    logger.error(`UNCAUGHT EXCEPTION: ${error.message}`, { stack: error.stack });
+    if (process.env.NODE_ENV !== 'development') {
+      process.exit(1);
+    }
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('UNHANDLED REJECTION: ', { promise, reason });
+  });
 
   container.resolve('passportSetup');
   container.resolve('welcomeEmailListener');
@@ -67,8 +79,8 @@ async function startServer() {
   app.use(errorHandlerMiddleware);
 
   app.listen(port, () => {
-    console.log(`📡 Server is running on http://localhost:${port}`);
-    console.log(`🚀 GraphQL Endpoint available in http://localhost:${port}/graphql`);
+    logger.debug(`📡 Server is running on http://localhost:${port}`);
+    logger.debug(`🚀 GraphQL Endpoint available in http://localhost:${port}/graphql`);
   });
 }
 

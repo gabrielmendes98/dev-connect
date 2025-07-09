@@ -2,7 +2,6 @@ import { ApolloServerPlugin, BaseContext, GraphQLRequestContext } from '@apollo/
 
 export const httpStatusPlugin: ApolloServerPlugin = {
   async requestDidStart() {
-    console.log('GraphQL Request started');
     return {
       async willSendResponse(requestContext: GraphQLRequestContext<BaseContext>) {
         const { response } = requestContext;
@@ -15,7 +14,6 @@ export const httpStatusPlugin: ApolloServerPlugin = {
           }, 0);
 
           if (highestStatusCode && response.http) {
-            console.log(`httpStatusPlugin: defining HTTP status to ${highestStatusCode}.`);
             response.http.status = highestStatusCode;
           }
         }

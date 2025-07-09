@@ -2,16 +2,19 @@ import { TagEntity } from '@domain/content/entities/TagEntity';
 import { InternalServerError } from '@domain/shared/errors/HttpErrors';
 import { CreateDiscussionUseCase } from '@application/content/use-cases/create-discussion/CreateDiscussionUseCase';
 import { ListDiscussionFeedUseCase } from '@application/content/use-cases/list-discussion-feed/ListDiscussionFeedUseCase';
+import { Logger } from '@application/shared/ports/Logger';
 import { Resolvers } from '../generated/types';
 
 export interface DiscussionResolversDependencies {
   createDiscussionUseCase: CreateDiscussionUseCase;
   listDiscussionFeedUseCase: ListDiscussionFeedUseCase;
+  logger: Logger;
 }
 
 export const buildDiscussionResolvers = ({
   createDiscussionUseCase,
   listDiscussionFeedUseCase,
+  logger,
 }: DiscussionResolversDependencies): Resolvers => ({
   Query: {
     discussions: async (_, { input }) => {
@@ -43,7 +46,7 @@ export const buildDiscussionResolvers = ({
           discussion: result,
         };
       } catch (error) {
-        console.log('Error when creating discussion:', error);
+        logger.error('Error when creating discussion:', { error });
         throw new InternalServerError('Unable to create discussion.');
       }
     },

@@ -4,6 +4,7 @@ import { ListDiscussionFeedUseCase } from '@application/content/use-cases/list-d
 import { WelcomeEmailListener } from '@application/event-listeners/WelcomeEmailListener';
 import { AuthenticateUserUseCase } from '@application/identity/use-cases/authenticate-user/AuthenticateUserUseCase';
 import { RegisterUserUseCase } from '@application/identity/use-cases/register-user/RegisterUserUseCase';
+import { WinstonLogger } from '@infrastructure/adapters/WinstonLogger';
 import { setupPassport } from '@infrastructure/auth/PassportConfig';
 import { prisma } from '@infrastructure/database/prisma/PrismaClientService';
 import { MongoDiscussionRepository } from '@infrastructure/database/repositories/MongoDiscussionRepository';
@@ -24,6 +25,7 @@ const container = createContainer({
 container.register({
   // --- Values and Ready Instances ---
   prismaClient: asValue(prisma),
+  logger: asClass(WinstonLogger).singleton(),
 
   // --- Infrastructure Services (Singletons) ---
   userRepository: asClass(PrismaUserRepository).singleton(),
@@ -47,7 +49,7 @@ container.register({
   authMiddleware: asFunction(buildAuthMiddleware).singleton().proxy(),
 
   // --- Other setups ---
-  passportSetup: asFunction(setupPassport).singleton(),
+  passportSetup: asFunction(setupPassport).singleton().proxy(),
   welcomeEmailListener: asClass(WelcomeEmailListener).singleton(),
 });
 

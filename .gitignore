@@ -4,3 +4,4 @@ dist
 .env
 coverage
 src/presentation/graphql/generated
+logs

@@ -16,6 +16,7 @@ This project was created to practice some concepts and skills, like:
 - Data validation
   - Added an adapted version of Notification pattern
 - Cursor-based pagination
+- Logging
 
 In the future, maybe I will include some more things, like:
 
@@ -25,7 +26,6 @@ In the future, maybe I will include some more things, like:
 
 ## TODO
 
-- Add Winstonlogger and remove console.log
 - Add more tests
 - Refactor architecture drawing to add new presentation layer and reflect domain changes
 

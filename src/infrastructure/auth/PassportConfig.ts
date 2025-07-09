@@ -2,8 +2,9 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
 import { AuthWithGoogleCredentials } from '@application/identity/services/auth-service/AuthWithGoogleService';
+import { Logger } from '@application/shared/ports/Logger';
 
-export const setupPassport = () => {
+export const setupPassport = ({ logger }: { logger: Logger }) => {
   passport.use(
     new GoogleStrategy(
       {
@@ -12,7 +13,7 @@ export const setupPassport = () => {
         callbackURL: process.env.GOOGLE_CALLBACK_URL!,
       },
       async (accessToken, refreshToken, profile: Profile, done) => {
-        console.log('PassportConfig: Profile received from Google.');
+        logger.info('PassportConfig: Profile received from Google.');
 
         const email = profile.emails?.[0].value;
 

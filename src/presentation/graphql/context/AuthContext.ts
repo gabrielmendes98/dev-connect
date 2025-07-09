@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { TokenPayload, TokenService } from '@domain/identity/services/TokenService';
 import { UnauthorizedError } from '@domain/shared/errors/HttpErrors';
+import { Logger } from '@application/shared/ports/Logger';
 
 export interface AuthContext {
   auth: TokenPayload | null;
@@ -9,11 +10,16 @@ export interface AuthContext {
 export interface BuildAuthContextArgs {
   req: Request;
   tokenService: TokenService;
+  logger: Logger;
 }
 
-export const buildAuthContext = ({ req, tokenService }: BuildAuthContextArgs): AuthContext => {
+export const buildAuthContext = ({
+  req,
+  tokenService,
+  logger,
+}: BuildAuthContextArgs): AuthContext => {
   if (req.body.operationName === 'IntrospectionQuery') {
-    console.log('buildAuthContext: IntrospectionQuery auth bypass');
+    logger.debug('buildAuthContext: IntrospectionQuery auth bypass');
     return { auth: null };
   }
 
@@ -27,7 +33,7 @@ export const buildAuthContext = ({ req, tokenService }: BuildAuthContextArgs): A
         return { auth: payload };
       }
     } catch (error) {
-      console.error('buildAuthContext: Error in token validation:', error);
+      logger.error('buildAuthContext: Error in token validation:', { error });
       throw new UnauthorizedError('Invalid or expired token.');
     }
   }

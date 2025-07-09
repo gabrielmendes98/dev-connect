@@ -2,11 +2,15 @@ import { PrismaClient } from '@prisma/client';
 import { ProfileEntity } from '@domain/identity/entities/ProfileEntity';
 import { UserEntity } from '@domain/identity/entities/UserEntity';
 import { UserRepository } from '@domain/identity/repositories/UserRepository';
+import { Logger } from '@application/shared/ports/Logger';
 import { ProfileMapper } from '../mappers/ProfileMapper';
 import { UserMapper } from '../mappers/UserMapper';
 
 export class PrismaUserRepository implements UserRepository {
-  constructor(private readonly prismaClient: PrismaClient) {}
+  constructor(
+    private readonly prismaClient: PrismaClient,
+    private readonly logger: Logger,
+  ) {}
 
   async createWithProfile(user: UserEntity, profile: ProfileEntity): Promise<void> {
     try {
@@ -26,7 +30,7 @@ export class PrismaUserRepository implements UserRepository {
         });
       });
     } catch (error) {
-      console.log('Error creating user and profile in transaction:', error);
+      this.logger.error('Error creating user and profile in transaction:', { error });
       throw error;
     } finally {
       await this.prismaClient.$disconnect();
