@@ -1,4 +1,3 @@
-# TODO: Create common schema for pagination
 input PaginatedDiscussionsInput {
   limit: Int!
   after: String
